@@ -10,11 +10,11 @@ import javax.swing.*;
 public class TaskAWindow extends JFrame {
 	public final static int MIN = 0;
 	public final static int MAX = 10000;
-	public final static int MARK = 1000;
+	public final static int MARK = (int) (0.1 * MAX);
 	public final static int FIRST_POS = (int) (0.1 * MAX);
 	public final static int SECOND_POS = (int) (0.9*MAX);
 	public final static int STEP = 10;
-	public final static int SLEEP = 20;
+	public final static int SLEEP = 200;
 	
 	private JSlider slider;
 	private JRadioButton rButtonNone;
@@ -36,7 +36,7 @@ public class TaskAWindow extends JFrame {
 					//slider.setValue(FIRST_POS);
 					
 					try {
-						Thread.sleep(SLEEP);
+						Thread.sleep(SLEEP/Thread.currentThread().getPriority());
 					} catch (InterruptedException e) {
 						return;				
 					}
@@ -61,9 +61,8 @@ public class TaskAWindow extends JFrame {
 					slider.setValue(pos);
 					//slider.setValue(SECOND_POS);	
 					
-					System.out.println("Not Interrupted");
 					try {
-						Thread.sleep(SLEEP);
+						Thread.sleep(SLEEP/Thread.currentThread().getPriority());
 					} catch (InterruptedException e) {
 						return;
 					}				
@@ -119,8 +118,8 @@ public class TaskAWindow extends JFrame {
 			public void itemStateChanged(ItemEvent event){
 				if(event.getStateChange() == ItemEvent.SELECTED && t1.isAlive() && t2.isAlive())
 				{
-					t1.setPriority(Thread.MIN_PRIORITY);
-					t2.setPriority(Thread.MIN_PRIORITY);
+					t1.setPriority(Thread.NORM_PRIORITY);
+					t2.setPriority(Thread.NORM_PRIORITY);
 					System.out.printf("T1 %d\n",t1.getPriority());
 					System.out.printf("T2 %d\n\n",t2.getPriority());
 				}
@@ -141,6 +140,8 @@ public class TaskAWindow extends JFrame {
 				if((t1 == null && t2 == null) || !(t1.isAlive() && t2.isAlive()) ) {
 					t1 = new Thread(new TThread1(slider));
 					t2 = new Thread(new TThread2(slider));
+					t1.setDaemon(true);
+					t2.setDaemon(true);
 					t1.start();
 					t2.start();
 					rButtonNone.setSelected(true);

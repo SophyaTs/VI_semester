@@ -12,10 +12,11 @@ public class TaskBWindow extends JFrame {
 
 	public final static int MIN = 0;
 	public final static int MAX = 10000;
-	public final static int MARK = 1000;
-	public final static int FIRST_POS = 1000;
-	public final static int SECOND_POS = 9000;
-	public final static int STEP = 1;
+	public final static int MARK = (int) (0.1 * MAX);
+	public final static int FIRST_POS = (int) (0.1 * MAX);
+	public final static int SECOND_POS = (int) (0.9*MAX);
+	public final static int STEP = 100;
+	public final static int SLEEP = 200;
 	
 	private JSlider slider;
 	private JButton startButton1, startButton2, stopButton1, stopButton2;
@@ -32,12 +33,18 @@ public class TaskBWindow extends JFrame {
 		
 		public void run() {
 			while(!Thread.currentThread().isInterrupted()) {
+				synchronized(slider) {
 					int pos = slider.getValue();
 					pos = FIRST_POS < pos - STEP ? pos - STEP : FIRST_POS;
 					slider.setValue(pos);
-					//slider.setValue(FIRST_POS);	
+					//slider.setValue(FIRST_POS);
 					
-					System.out.println("Not Interrupted");
+					try {
+						Thread.sleep(SLEEP/Thread.currentThread().getPriority());
+					} catch (InterruptedException e) {
+						return;				
+					}
+				}		
 			}			
 		}		
 	}
@@ -52,10 +59,18 @@ public class TaskBWindow extends JFrame {
 
 		public void run() {
 			while(!Thread.currentThread().isInterrupted()) {
+				synchronized(slider) {
 					int pos = slider.getValue();
 					pos = SECOND_POS > pos + STEP ? pos + STEP : SECOND_POS;
 					slider.setValue(pos);
-					//slider.setValue(SECOND_POS);
+					//slider.setValue(SECOND_POS);	
+					
+					try {
+						Thread.sleep(SLEEP/Thread.currentThread().getPriority());
+					} catch (InterruptedException e) {
+						return;
+					}				
+				}
 			}			
 		}		
 	}
@@ -81,13 +96,19 @@ public class TaskBWindow extends JFrame {
 		startButton1 = new JButton("START 1");
 		startButton1.addMouseListener(new MouseAdapter() {			 
 			public void mouseClicked(MouseEvent event) {
-				boolean free = semaphore.tryAcquire();
-				if(free) {
-					t1 = new Thread(new TThread1(slider));
-					t1.start();
-					stopButton2.setEnabled(false);
-				} else
-					JOptionPane.showMessageDialog(null, "Other thread is running");
+				Thread t = new Thread(new Runnable() {
+					public void run() {
+						boolean free = semaphore.tryAcquire();
+						if(free) {
+							t1 = new Thread(new TThread1(slider));
+							t1.setDaemon(true);
+							t1.start();
+							stopButton2.setEnabled(false);
+						} else
+							JOptionPane.showMessageDialog(null, "Other thread is running");
+					}
+				});	
+				t.start();
 			}			 
 			});
 		box.add(startButton1);
@@ -96,12 +117,17 @@ public class TaskBWindow extends JFrame {
 		stopButton1 = new JButton("STOP  1");
 		stopButton1.addMouseListener(new MouseAdapter() {			 
 			public void mouseClicked(MouseEvent event) {
-				boolean free = semaphore.tryAcquire();
-				if(!free){
-					t1.interrupt();
-					semaphore.release();
-					stopButton2.setEnabled(true);
-				}
+				Thread t = new Thread(new Runnable() {
+					public void run() {
+						boolean free = semaphore.tryAcquire();
+						if(!free){
+							t1.interrupt();
+							semaphore.release();
+							stopButton2.setEnabled(true);
+						}
+					}
+				});
+				t.start();				
 			}			 
 			});
 		box.add(stopButton1);
@@ -111,13 +137,19 @@ public class TaskBWindow extends JFrame {
 		startButton2 = new JButton("START 2");
 		startButton2.addMouseListener(new MouseAdapter() {			 
 			public void mouseClicked(MouseEvent event) {
-				boolean free = semaphore.tryAcquire();
-				if(free) {
-					t2 = new Thread(new TThread2(slider));
-					t2.start();
-					stopButton1.setEnabled(false);
-				} else 
-					JOptionPane.showMessageDialog(null, "Other thread is running");
+				Thread t = new Thread(new Runnable() {
+					public void run() {
+						boolean free = semaphore.tryAcquire();
+						if(free) {
+							t2 = new Thread(new TThread2(slider));
+							t2.setDaemon(true);
+							t2.start();
+							stopButton1.setEnabled(false);
+						} else 
+							JOptionPane.showMessageDialog(null, "Other thread is running");
+					}
+				});
+				t.start();				
 			}			 
 			});
 		box.add(startButton2);
@@ -126,12 +158,17 @@ public class TaskBWindow extends JFrame {
 		stopButton2 = new JButton("STOP  2");
 		stopButton2.addMouseListener(new MouseAdapter() {			 
 			public void mouseClicked(MouseEvent event) {
-				boolean free = semaphore.tryAcquire();
-				if(!free) {					
-					t2.interrupt();
-					semaphore.release();
-					stopButton1.setEnabled(true);
-				}
+				Thread t = new Thread(new Runnable() {
+					public void run() {
+						boolean free = semaphore.tryAcquire();
+						if(!free) {					
+							t2.interrupt();
+							semaphore.release();
+							stopButton1.setEnabled(true);
+						}
+					}
+				});
+				t.start();
 			}			 
 			});
 		box.add(stopButton2);
