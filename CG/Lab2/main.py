@@ -7,24 +7,31 @@ class Edge:
         self.pfrom = pfrom
         self.pto = pto
         self.weight = 1
-        self.next_in = None
         self.rotation = math.atan2(pto.y - pfrom.y, pto.x - pfrom.x)
+        
+        # linked list of edges which have same pto
+        self.next_in = None       
 
     def __gt__(self, o: object) -> bool:
-        return self.rotation < o.rotation
+        if self.pfrom == o.pfrom:
+            return self.rotation < o.rotation
+        else:
+            return self.rotation > o.rotation
 
     def __repr__(self) -> str:
         return "<" + str(self.pfrom) + ", " + str(self.pto) + ">" + " w = " + str(self.weight)
 
 class Vertex:
     number = 0
-
     def __init__(self, x, y) -> None:
         Vertex.number+=1
         self.n = Vertex.number        
         self.x = float(x)
         self.y = float(y)
+        
+        # list of edges which start from this vertex (have same pfrom == this vertex) 
         self.edges_out = []
+        # pointer to linked list of edges which end in this vertex (have same pto == this vertex)
         self.edges_in = None
 
     def __gt__(self, o: object) -> bool:
@@ -43,11 +50,17 @@ class Vertex:
     def __repr__(self) -> str:
         return str(self.n)
 
-    def add_edge(self, pto) -> None:
+    def add_edge_in(self, pto):
         edge = Edge(self,pto)
         self.edges_out.append(edge)
         edge.next_in = pto.edges_in
         pto.edges_in = edge
+
+    def add_edge(self, other) -> None:
+        if self < other:
+            self.add_edge_in(other)
+        else:
+            other.add_edge_in(self)
 
     def wIn(self) -> int:
         weight = 0
@@ -80,9 +93,127 @@ class Vertex:
                 return edge
         return None
 
+def calculate_cross(edge, y) -> float:
+    x1 = edge.pfrom.x
+    y1 = edge.pfrom.y
+    x2 = edge.pto.x
+    y2 = edge.pto.y
+    return (x2*y1 - x1*y2 + y*(x1 - x2))/(y1 - y2)
+
+# utility function: deletes unnecessary edges OR adds necessary edge
+def check_vertex(vertex, current_edges, current_vertexes, top_to_bottom = False) -> int:
+        j = 0
+
+        # vertex is regular       
+        if (not top_to_bottom and vertex.edges_in != None) or (top_to_bottom and len(vertex.edges_out) > 0):
+            # find edges which end in this vertex           
+            while j < len(current_edges):
+                if ((not top_to_bottom and current_edges[j].pto == vertex) or 
+                    (top_to_bottom and current_edges[j].pfrom == vertex)):
+                    break
+                j+=1
+            
+            # remove them from status lists
+            while j < len(current_edges) and ((not top_to_bottom and current_edges[j].pto == vertex) or 
+                                            (top_to_bottom and current_edges[j].pfrom == vertex)):
+                current_edges.remove(current_edges[j])
+                current_vertexes.remove(current_vertexes[j])
+                j += 1
+            current_vertexes[j-1] = vertex
+        
+        # vertex is irregular, requires fixing
+        else:
+            # locate vertex between current edges
+            while j < len(current_edges):
+                if calculate_cross(current_edges[j], vertex.y) > vertex.x:
+                    break
+                j += 1
+            # add edge to vertex (regularize vertex)
+            current_vertexes[j].add_edge(vertex)
+
+        return j
+
+def regularize(vertexes = []):
+    # sort edges from the leftmost edge to the rightmost
+    for v in vertexes:
+        v.edges_out.sort()
+    
+    # ============================================================ STATUS LISTS =====================================================================
+    # current_edges:                                    E1                               E2                             E3
+    # 
+    # current_vertexes: V1 (closest to E1 on the left)     V2 (closest between E1 E2)        V3 (closest between E2 E3)    V4 (closest to E3 on the right)
+    current_edges = []
+    current_vertexes = []
+
+    # from bottom to top
+    # init status lists with edges from the first vertex
+    for e in vertexes[0].edges_out:
+        current_edges.append(e)
+        current_vertexes.append(vertexes[0])
+    current_vertexes.append(vertexes[0])
+
+    for i in range(1,len(vertexes)-1): 
+        j = check_vertex(vertexes[i],current_edges, current_vertexes)
+        
+        # get left unchanges part of status lists
+        tmp_edges = current_edges[0:j]
+        tmp_vertexes = current_vertexes[0:j]
+        
+        # add new edges to status lists
+        for e in vertexes[i].edges_out:
+            tmp_edges.append(e)
+            tmp_vertexes.append(vertexes[i])
+        tmp_vertexes.append(vertexes[i])
+
+        # get right unchanged part of status lists  
+        if (j < len(current_edges)):
+            tmp_edges += current_edges[j:len(current_edges)]
+            tmp_vertexes += current_vertexes[j+1:len(current_vertexes)]
+
+        current_edges = tmp_edges.copy()
+        current_vertexes = tmp_vertexes.copy()
+    
+    # from top to bottom
+    # init status lists with edges from the last vertex
+    current_edges.clear()
+    current_vertexes.clear()
+    
+    edge = vertexes[-1].edges_in
+    while edge != None:
+        current_edges.append(edge)
+        edge = edge.next_in
+        current_vertexes.append(vertexes[-1])
+    current_vertexes.append(vertexes[-1])
+    current_edges.sort()
+
+    for i in range (len(vertexes)-2, 0, -1):
+        j = check_vertex(vertexes[i],current_edges, current_vertexes, True)
+
+        # get left unchanges part of status lists
+        tmp_edges = current_edges[0:j]
+        tmp_vertexes = current_vertexes[0:j]
+
+        # add new edges to status lists
+        edges_in = []
+        edge = vertexes[i].edges_in
+        while edge != None:
+            edges_in.append(edge)
+            edge = edge.next_in
+            tmp_vertexes.append(vertexes[i])
+        tmp_vertexes.append(vertexes[i])
+        edges_in.sort()
+        tmp_edges += edges_in
+
+        # get right unchanged part of status lists  
+        if (j < len(current_edges)):
+            tmp_edges += current_edges[j:len(current_edges)]
+            tmp_vertexes += current_vertexes[j+1:len(current_vertexes)]
+
+        current_edges = tmp_edges.copy()
+        current_vertexes = tmp_vertexes.copy()
 
 def balance(vertexes = []):
-        # sort edges from the most left edge to the most right
+        # sort edges from the leftmost edge to the rightmost
         for v in vertexes:
             v.edges_out.sort()
 
@@ -102,7 +233,7 @@ def balance(vertexes = []):
 
         # second iterartion: for every vertex make wOut <= wIn, iterate from vn to v1
         # after these iterations wOut = wIn
-        for i in range(len(vertexes)-1, 1, -1):
+        for i in range(len(vertexes)-2, 0, -1):
             wIn = vertexes[i].wIn()
             wOut = vertexes[i].wOut()
 
@@ -114,7 +245,10 @@ def balance(vertexes = []):
             if wOut > wIn:
                 d2.weight = wOut - wIn + d2.weight
 
-def create_chains(vertexes = []):
+def create_chains(x,y, vertexes = []):
+        vertexes.sort()
+        regularize(vertexes)
+        draw_graph(x,y,vertexes)       
         balance(vertexes)
 
         # because weight of the edge means how many chains will contain this edge,
@@ -286,25 +420,25 @@ def readGraph():
     fe = open("edges.txt")
     for line in fe.readlines():
         numbers = [int(i) for i in line.split(" ")]
-        if vertexes[numbers[1]-1] > vertexes[numbers[0]-1]:
-            vertexes[numbers[0]-1].add_edge(vertexes[numbers[1]-1])
-        else:
-            vertexes[numbers[1]-1].add_edge(vertexes[numbers[0]-1])
+        vertexes[numbers[0]-1].add_edge(vertexes[numbers[1]-1])
     fe.close()
-
-    vertexes.sort()
+   
     return vertexes
 
 
 vertexes = readGraph()
-chains = create_chains(vertexes)
 
-for c in chains:
+x = 6
+y = 2.5
+
+draw_graph(x,y,vertexes)
+
+chains = create_chains(x,y, vertexes)
+
+""" for c in chains:
     line = ""
     for v in c:
         line += str(v)+" "
-    print(line)
+    print(line) """
 
-x = 0
-y = 0
 locate_point(x,y,chains, vertexes)
