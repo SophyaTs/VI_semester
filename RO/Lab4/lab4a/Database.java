@@ -84,22 +84,14 @@ public class Database {
 		public void run() {
 			while(!Thread.currentThread().isInterrupted())
 				try {
-					StringBuilder strbNumber = new StringBuilder();
-					StringBuilder strbName = new StringBuilder();
-					for(int i = 0; i < 13; ++i)
-						strbNumber.append(rand.nextInt(10));					
-					for(int i = 0; i < 10; ++i)
-						strbName.append((char)(65+rand.nextInt(36)));					
+									
 					
 					WriteLock l = lock.writeLock();
 					l.lock();
-					FileWriter fw = new FileWriter(file, true);
-					lastNumber = strbNumber.toString();
-					lastName = strbName.toString();
-					String line = lastNumber + " " + lastName;
-					fw.write(line+"\n");
-					System.out.println("Added "+line);
-				    fw.close();
+					if(rand.nextBoolean())
+						add();
+					else
+						remove();
 				    l.unlock();
 				    
 				    randomSleep();
@@ -107,6 +99,37 @@ public class Database {
 					e.printStackTrace();
 				}
 		    
+		}
+		
+		private void add() throws IOException {
+			StringBuilder strbNumber = new StringBuilder();
+			StringBuilder strbName = new StringBuilder();
+			for(int i = 0; i < 13; ++i)
+				strbNumber.append(rand.nextInt(10));					
+			for(int i = 0; i < 10; ++i)
+				strbName.append((char)(65+rand.nextInt(36)));
+			
+			FileWriter fw = new FileWriter(file, true);
+			lastNumber = strbNumber.toString();
+			lastName = strbName.toString();
+			String line = lastNumber + " " + lastName;
+			fw.write(line+"\n");
+			System.out.println("Added "+line);
+		    fw.close();
+		}
+		
+		private void remove() throws IOException {
+			Scanner sc = new Scanner(new File(file));
+			sc.nextLine();
+			
+			StringBuilder strb = new StringBuilder();
+			while(sc.hasNextLine())
+				strb.append(sc.nextLine()+"\n");
+			sc.close();
+			FileWriter fw = new FileWriter(file);
+			fw.write(strb.toString());
+			fw.close();
+			System.out.println("Removed record");
 		}
 		
 	}
