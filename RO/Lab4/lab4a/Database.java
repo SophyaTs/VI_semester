@@ -16,30 +16,27 @@ public class Database {
 	private static Random rand = new Random();
 	
 	private static ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
+	private static String lastName;
+	private static String lastNumber;
 	
 	public static class FinderPhone implements Runnable{
 
 		public void run() {
 			while(!Thread.currentThread().isInterrupted())
-				try {
-					StringBuilder strb = new StringBuilder();
-					for(int i = 0; i < 13; ++i)
-						strb.append(rand.nextInt(10));
-					String expectedNumber = strb.toString();
-					
+				try {					
 					ReadLock l = lock.readLock();
 					l.lock();
+					System.out.println("Looking for Phone number...");
 					Scanner sc = new Scanner(new File(file));
 					while(sc.hasNextLine()) {
 						String line = sc.nextLine();
 						String number = line.substring(0, 13);
 						String name = line.substring(14,line.length());
 						
-						if(expectedNumber == number ) {
+						if(number.equals(lastNumber) ) {
 							System.out.println("Found phone number!");
 							break;
-						} else						
-							System.out.println("Phone number not found!");
+						}
 					}
 					sc.close();
 					l.unlock();
@@ -56,25 +53,20 @@ public class Database {
 
 		public void run() {
 			while(!Thread.currentThread().isInterrupted())
-				try {
-					StringBuilder strb = new StringBuilder();
-					for(int i = 0; i < 10; ++i)
-						strb.append((char)(65+rand.nextInt(36)));
-					String expectedName = strb.toString();
-					
+				try {					
 					ReadLock l = lock.readLock();
 					l.lock();
+					System.out.println("Looking for Name...");
 					Scanner sc = new Scanner(new File(file));
 					while(sc.hasNextLine()) {
 						String line = sc.nextLine();
 						String number = line.substring(0, 13);
 						String name = line.substring(14,line.length());
 						
-						if(expectedName == name ) {
+						if(name.equals(lastName)) {
 							System.out.println("Found name!");
 							break;
-						} else						
-							System.out.println("Name not found!");
+						}												
 					}
 					sc.close();
 					l.unlock();
@@ -92,17 +84,19 @@ public class Database {
 		public void run() {
 			while(!Thread.currentThread().isInterrupted())
 				try {
-					StringBuilder strb = new StringBuilder();
+					StringBuilder strbNumber = new StringBuilder();
+					StringBuilder strbName = new StringBuilder();
 					for(int i = 0; i < 13; ++i)
-						strb.append(rand.nextInt(10));
-					strb.append(" ");
+						strbNumber.append(rand.nextInt(10));					
 					for(int i = 0; i < 10; ++i)
-						strb.append((char)(65+rand.nextInt(36)));
-					String line = strb.toString();
+						strbName.append((char)(65+rand.nextInt(36)));					
 					
 					WriteLock l = lock.writeLock();
 					l.lock();
 					FileWriter fw = new FileWriter(file, true);
+					lastNumber = strbNumber.toString();
+					lastName = strbName.toString();
+					String line = lastNumber + " " + lastName;
 					fw.write(line+"\n");
 					System.out.println("Added "+line);
 				    fw.close();
