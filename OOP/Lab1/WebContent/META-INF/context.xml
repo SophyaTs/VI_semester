@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+<!--     <Resource name="jdbc/connectorDs" auth="Container" -->
+<!--         type="javax.sql.DataSource" username="postgres" password="password" -->
+<!--         driverClassName="org.postgresql.Driver" -->
+<!--         url="jdbc:postgresql://localhost:8080/development_team" -->
+<!--         maxTotal="10" maxIdle="4" /> -->
+
+</Context>
