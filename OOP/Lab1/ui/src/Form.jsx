@@ -31,10 +31,11 @@ class Form extends Component{
             password: this.state.password
           }),
           success: function(responseJSON){
-            if (responseJSON.status === "false")
+            var resp = JSON.parse(responseJSON)
+            if (resp.status === false)
               $("#errormsg").text("Login or password was incorrect");
             else{
-              localStorage.setItem("username",responseJSON.name);
+              localStorage.setItem("username",resp.name);
               window.location.href = '/d_u=' + this.state.login;                      
             }
           }.bind(this),

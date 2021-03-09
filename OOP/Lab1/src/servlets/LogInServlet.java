@@ -104,10 +104,10 @@ public class LogInServlet extends HttpServlet {
 					System.out.println("ok");
 					response.getWriter().write(new Gson().toJson(new Response(true,"dev",rs.getString(2))));
 				} else
-					System.out.println("error");
+					System.out.println("error: wrong password");
 					response.getWriter().write(new Gson().toJson(new Response(false,"","")));
 			} else {
-				System.out.println("error");
+				System.out.println("error: no such user");
 				response.getWriter().write(new Gson().toJson(new Response(false,"","")));
 			}
 			cp.releaseConnection(connection);
