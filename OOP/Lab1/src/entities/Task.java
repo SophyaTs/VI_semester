@@ -15,6 +15,12 @@ public class Task {
 		this.qualification = qualification;
 		this.workers_num = workers_num;
 	}
+	
+	public Task(int id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
 
 	public int getId() {
 		return id;

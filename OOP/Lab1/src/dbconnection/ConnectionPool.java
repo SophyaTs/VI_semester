@@ -12,7 +12,7 @@ public class ConnectionPool {
 	private final String url = "jdbc:postgresql://localhost:5432/development_team";
 	private final String user = "postgres";
 	private final String password = "password";
-	private final int MAX_CONNECTIONS = 5;
+	private final int MAX_CONNECTIONS = 8;
 	
 	private BlockingQueue<Connection> connections;
 	

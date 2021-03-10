@@ -1,6 +1,5 @@
 import { Component } from "react";
 import $ from "jquery";
-import {user} from './globalvars.jsx';
 
 class Greeting extends Component{
     constructor(props){

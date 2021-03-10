@@ -1,6 +1,5 @@
 import { Component } from 'react';
 import $, { ajax, post } from "jquery";
-import {user} from './globalvars.jsx'
 
 class Form extends Component{
     constructor(props){
@@ -30,12 +29,13 @@ class Form extends Component{
             login: this.state.login,
             password: this.state.password
           }),
-          success: function(responseJSON){
-            var resp = JSON.parse(responseJSON)
+          success: function(resp){
+            //var resp = JSON.parse(responseJSON)
             if (resp.status === false)
               $("#errormsg").text("Login or password was incorrect");
             else{
               localStorage.setItem("username",resp.name);
+              localStorage.setItem("employee_id", resp.id);
               window.location.href = '/d_u=' + this.state.login;                      
             }
           }.bind(this),

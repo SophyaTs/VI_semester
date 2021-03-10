@@ -39,24 +39,21 @@ public class MyCORSFilter implements Filter {
             throws IOException, ServletException {
  
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-        System.out.println("CORSFilter HTTP Request: " + request.getMethod());
- 
-        // Authorize (allow) all domains to consume the content
-           
-        
- 
+        System.out.println("CORSFilter HTTP Request: " + request.getMethod());      
+  
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
  
         // For HTTP OPTIONS verb/method reply with ACCEPTED status code -- per CORS handshake
         if (request.getMethod().equals("OPTIONS")) {
         	((HttpServletResponse) servletResponse).addHeader("Access-Control-Allow-Headers", "X-PINGOTHER, Access-Control-Allow-Origin, X-Requested-With, Content-Type, Accept");
             ((HttpServletResponse) servletResponse).addHeader("Access-Control-Allow-Methods","GET, OPTIONS, HEAD, PUT, POST");
+            // Authorize (allow) react app domains to consume the content
             ((HttpServletResponse) servletResponse).addHeader("Access-Control-Allow-Origin", "http://localhost:3000");    
         	System.out.println("Accepted");
             resp.setStatus(HttpServletResponse.SC_ACCEPTED);
             return;
         }
-        //System.out.println("Denied");
+        
         // pass the request along the filter chain
         chain.doFilter(request, servletResponse);
     }

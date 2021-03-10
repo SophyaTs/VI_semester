@@ -23,51 +23,13 @@ import dbconnection.ConnectionPool;
 @WebServlet("/index")
 public class LogInServlet extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//RequestDispatcher requestDispatcher = request.getRequestDispatcher("login.jsp");
-        //requestDispatcher.forward(request, response);
 		
 		//response.addHeader("Access-Control-Allow-Origin", "http://localhost:3000");
 	}
 	
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//		try {
-//			 Class.forName("org.postgresql.Driver");
-//		} catch (ClassNotFoundException e) {
-//			 System.out.println("JDBC Driver not found");
-//			 e.printStackTrace();
-//		}
-//		 
-//		try(Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/development_team", "postgres","password");) {
-//			Statement st = connection.createStatement();
-//
-//			String login = request.getParameter("login");
-//			String password = request.getParameter("password");
-//			
-//			String sql = "SELECT password FROM employees WHERE login = '" + login + "'";
-//			
-//			ResultSet rs = st.executeQuery(sql);
-//			if(rs.next()) {
-//				String expectedPassword = rs.getString(1);
-//				if(expectedPassword.equals(password)) {
-//					doGet(request,response);
-//					System.out.println("Logged in");
-//				} else
-//					System.out.println("Wrong password");
-//			} else
-//				System.out.println("User not found");
-//			
-//			st.close();
-//			connection.close();
-//			
-//		} catch (SQLException e) {
-//			System.out.println("Database not found or SQL was not executed properly");
-//			e.printStackTrace();
-//		} 
-		//response.setStatus(HttpServletResponse.SC_OK);
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("application/json");	
-	    //response.addHeader("Access-Control-Allow-Headers", "X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept");
-	    //response.addHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, HEAD");
 	    response.addHeader("Access-Control-Allow-Origin", "http://localhost:3000");	    
 		
 		ConnectionPool cp = ConnectionPool.getConnectionPool();
@@ -84,31 +46,30 @@ public class LogInServlet extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		request.setCharacterEncoding("UTF-8");
 		JsonObject data = new Gson().fromJson(request.getReader(), JsonObject.class);
 		
 		String login = data.get("login").getAsString();
 		String password = data.get("password").getAsString();
 		System.out.println(login+" "+ password);
 					
-		String sql = "SELECT password,name FROM employees WHERE login = '" + login + "'";					
+		String sql = "SELECT password,name,id FROM employees WHERE login = '" + login + "'";					
 		ResultSet rs;
-		response.setContentType("text/plain"); 
 		
 		try {
 			rs = st.executeQuery(sql);		
-			//response.setCharacterEncoding("UTF-8");response.setContentType("JSON");
 			if(rs.next()) {
 				String expectedPassword = rs.getString(1);
 				if(expectedPassword.equals(password)) {
 					System.out.println("ok");
-					response.getWriter().write(new Gson().toJson(new Response(true,"dev",rs.getString(2))));
+					response.getWriter().write(new Gson().toJson(new Response(true,"dev",rs.getString(2),rs.getInt(3))));
+					cp.releaseConnection(connection);
+					return;
 				} else
 					System.out.println("error: wrong password");
-					response.getWriter().write(new Gson().toJson(new Response(false,"","")));
+					response.getWriter().write(new Gson().toJson(new Response(false,"","",0)));
 			} else {
 				System.out.println("error: no such user");
-				response.getWriter().write(new Gson().toJson(new Response(false,"","")));
+				response.getWriter().write(new Gson().toJson(new Response(false,"","",0)));
 			}
 			cp.releaseConnection(connection);
 
@@ -124,11 +85,13 @@ public class LogInServlet extends HttpServlet {
 		public boolean status;
 		public String role;
 		public String name;
-		public Response(boolean status, String role, String name) {
+		public int id; 
+		public Response(boolean status, String role, String name, int id) {
 			super();
 			this.status = status;
 			this.role = role;
 			this.name = name;
+			this.id = id;
 		}
 	}
 }

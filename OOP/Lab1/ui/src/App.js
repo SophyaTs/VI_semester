@@ -1,5 +1,4 @@
 import './App.css';
-import { Component } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Form from './Form.jsx'
 import ManagerWorkspace from './ManagerWorkspace.jsx'
