@@ -49,7 +49,6 @@ public class MyCORSFilter implements Filter {
             ((HttpServletResponse) servletResponse).addHeader("Access-Control-Allow-Methods","GET, OPTIONS, HEAD, PUT, POST");
             // Authorize (allow) react app domains to consume the content
             ((HttpServletResponse) servletResponse).addHeader("Access-Control-Allow-Origin", "http://localhost:3000");    
-        	System.out.println("Accepted");
             resp.setStatus(HttpServletResponse.SC_ACCEPTED);
             return;
         }

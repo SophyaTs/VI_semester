@@ -1,14 +1,14 @@
 package entities;
 
 public class Employee {
-	private int id;
+	private long id;
 	private String name;
 	private String login;
 	private String password;
 	private Role position;
 	private int salary;
 	
-	public Employee(int id, String name, String login, String password, Role position, int salary) {
+	public Employee(long id, String name, String login, String password, Role position, int salary) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -18,11 +18,13 @@ public class Employee {
 		this.salary = salary;
 	}
 
-	public int getId() {
+	public Employee() {}
+
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

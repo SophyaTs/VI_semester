@@ -1,20 +1,20 @@
 package entities;
 
 public class Project {
-	private int id;
+	private long id;
 	private String name;
 	
-	public Project(int id, String name) {
+	public Project(long id, String name) {
 		super();
 		this.id = id;
 		this.name = name;
 	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

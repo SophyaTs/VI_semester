@@ -1,40 +1,42 @@
 package entities;
 
 public class DevelopingRelation {
-	private int emplyee_id;
-	private int task_id;
-	private int hrs;
+	private long emplyee_id;
+	private long task_id;
+	private long hrs;
 	
-	public DevelopingRelation(int emplyee_id, int task_id, int hoursSpent) {
+	public DevelopingRelation(long emplyee_id, long task_id, long hoursSpent) {
 		super();
 		this.emplyee_id = emplyee_id;
 		this.task_id = task_id;
 		this.hrs = hoursSpent;
 	}
 
-	public int getEmplyee_id() {
+	public long getEmplyee_id() {
 		return emplyee_id;
 	}
 
-	public void setEmplyee_id(int emplyee_id) {
+	public void setEmplyee_id(long emplyee_id) {
 		this.emplyee_id = emplyee_id;
 	}
 
-	public int getTask_id() {
+	public long getTask_id() {
 		return task_id;
 	}
 
-	public void setTask_id(int task_id) {
+	public void setTask_id(long task_id) {
 		this.task_id = task_id;
 	}
 
-	public int getHrs() {
+	public long getHrs() {
 		return hrs;
 	}
 
-	public void setHrs(int hrs) {
+	public void setHrs(long hrs) {
 		this.hrs = hrs;
 	}
+
+	
 	
 	
 }

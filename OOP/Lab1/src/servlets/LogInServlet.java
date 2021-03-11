@@ -19,6 +19,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import dbconnection.ConnectionPool;
+import entities.Employee;
+import entities.Role;
+import dao.EmployeeDAO;
 
 @WebServlet("/index")
 public class LogInServlet extends HttpServlet {
@@ -31,67 +34,43 @@ public class LogInServlet extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("application/json");	
 	    response.addHeader("Access-Control-Allow-Origin", "http://localhost:3000");	    
-		
-		ConnectionPool cp = ConnectionPool.getConnectionPool();
-		Connection connection = null;		
-		Statement st = null;
-		
-		try {
-			connection = cp.getConnection();
-			st = connection.createStatement();
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 		JsonObject data = new Gson().fromJson(request.getReader(), JsonObject.class);
 		
 		String login = data.get("login").getAsString();
 		String password = data.get("password").getAsString();
-		System.out.println(login+" "+ password);
-					
-		String sql = "SELECT password,name,id FROM employees WHERE login = '" + login + "'";					
-		ResultSet rs;
-		
-		try {
-			rs = st.executeQuery(sql);		
-			if(rs.next()) {
-				String expectedPassword = rs.getString(1);
-				if(expectedPassword.equals(password)) {
-					System.out.println("ok");
-					response.getWriter().write(new Gson().toJson(new Response(true,"dev",rs.getString(2),rs.getInt(3))));
-					cp.releaseConnection(connection);
-					return;
-				} else
-					System.out.println("error: wrong password");
-					response.getWriter().write(new Gson().toJson(new Response(false,"","",0)));
-			} else {
-				System.out.println("error: no such user");
-				response.getWriter().write(new Gson().toJson(new Response(false,"","",0)));
-			}
-			cp.releaseConnection(connection);
 
-		} catch (SQLException | InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		Employee emp = EmployeeDAO.getEmployeeByLogin(login);
+		Response r;
+		if(emp != null) {
+			if(emp.getPassword().equals(password))
+				r = new Response(true,emp.getId(),emp.getName(),emp.getPosition());
+			else
+				r = new Response(false);
 		}
-	
-		
+		else
+			r = new Response(false);
+		response.getWriter().write(new Gson().toJson(r));			
 	}
 	
 	private static class Response{
 		public boolean status;
-		public String role;
+		public long id;
 		public String name;
-		public int id; 
-		public Response(boolean status, String role, String name, int id) {
+		public String role;
+		
+		public Response(boolean status, long id, String name, Role role) {
 			super();
 			this.status = status;
-			this.role = role;
-			this.name = name;
 			this.id = id;
+			this.name = name;
+			this.role = role.getTitle().equals("manager") ? "m" : "d";
 		}
+
+		public Response(boolean status) {
+			super();
+			this.status = status;
+		}	
+		
 	}
 }

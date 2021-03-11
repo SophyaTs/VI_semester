@@ -1,13 +1,13 @@
 package entities;
 
 public class Task {
-	private int id;
+	private long id;
 	private String name;
-	private int project_id;
+	private long project_id;
 	private Role qualification;
-	private int workers_num;
+	private long workers_num;
 	
-	public Task(int id, String name, int project_id, Role qualification, int workers_num) {
+	public Task(long id, String name, long project_id, Role qualification, long workers_num) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -16,17 +16,17 @@ public class Task {
 		this.workers_num = workers_num;
 	}
 	
-	public Task(int id, String name) {
+	public Task(long id, String name) {
 		super();
 		this.id = id;
 		this.name = name;
 	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -38,11 +38,11 @@ public class Task {
 		this.name = name;
 	}
 
-	public int getProject_id() {
+	public long getProject_id() {
 		return project_id;
 	}
 
-	public void setProject_id(int project_id) {
+	public void setProject_id(long project_id) {
 		this.project_id = project_id;
 	}
 
@@ -54,7 +54,7 @@ public class Task {
 		this.qualification = qualification;
 	}
 
-	public int getWorkers_num() {
+	public long getWorkers_num() {
 		return workers_num;
 	}
 
