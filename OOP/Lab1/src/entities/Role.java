@@ -2,13 +2,13 @@ package entities;
 
 import java.util.List;
 
-import dao.RoleDAO;
+import dao.RolesDAO;
 
 public class Role {
 	private long id;
 	private String title;
 	
-	public static List<Role> roles = RoleDAO.getRolesAll();
+	public static List<Role> roles = RolesDAO.getRolesAll();
 	
 	public Role(long id, String title) {
 		super();

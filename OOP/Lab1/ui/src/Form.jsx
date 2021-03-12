@@ -36,7 +36,7 @@ class Form extends Component{
             else{
               localStorage.setItem("username",resp.name);
               localStorage.setItem("employee_id", resp.id);
-              window.location.href = '/d_u=' + this.state.login;                      
+              window.location.href = '/m_u=' + this.state.login;                      
             }
           }.bind(this),
         });

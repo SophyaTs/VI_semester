@@ -21,7 +21,7 @@ import com.google.gson.JsonObject;
 import dbconnection.ConnectionPool;
 import entities.Employee;
 import entities.Role;
-import dao.EmployeeDAO;
+import dao.EmployeesDAO;
 
 @WebServlet("/index")
 public class LogInServlet extends HttpServlet {
@@ -40,7 +40,7 @@ public class LogInServlet extends HttpServlet {
 		String login = data.get("login").getAsString();
 		String password = data.get("password").getAsString();
 
-		Employee emp = EmployeeDAO.getEmployeeByLogin(login);
+		Employee emp = EmployeesDAO.getEmployeeByLogin(login);
 		Response r;
 		if(emp != null) {
 			if(emp.getPassword().equals(password))

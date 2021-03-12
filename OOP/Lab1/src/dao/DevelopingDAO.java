@@ -5,42 +5,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import dbconnection.ConnectionPool;
 import entities.Role;
 import entities.Task;
 
 public class DevelopingDAO {
-	public static List<Task> getTasksByEmpId(final long empId){
-		ConnectionPool cp = ConnectionPool.getConnectionPool();
-		try(Connection connection = cp.getConnection();) {
-			String sql = 
-					"SELECT id,name,project_id,qualification,workers_num "
-					+ "FROM developing INNER JOIN tasks ON task_id = id "
-					+ "WHERE employee_id = ?";		
-			PreparedStatement st = connection.prepareStatement(sql);
-			st.setLong(1, empId);
-			ResultSet rs = st.executeQuery();
-			List<Task> tasks = new ArrayList<Task>();
-			while(rs.next()) {				
-				long id = rs.getLong(1);
-				String name = rs.getString(2);
-				long project_id = rs.getLong(3);
-				Role qualification = Role.roles.get((int)rs.getLong(4)-1);
-				long workers_num = rs.getLong(5);
-				tasks.add(new Task(id,name,project_id,qualification,workers_num));
-			}
-			cp.releaseConnection(connection);
-			return tasks;
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
 	public static long getHours(final long empId, final long taskId) {
 		long hours = 0;
 		ConnectionPool cp = ConnectionPool.getConnectionPool();
@@ -52,10 +25,11 @@ public class DevelopingDAO {
 			PreparedStatement st = connection.prepareStatement(sql);
 			st.setLong(2, empId);
 			st.setLong(1, taskId);
-			ResultSet rs = st.executeQuery();
+			ResultSet rs = st.executeQuery();			
 			if(rs.next()) {				
 				hours = rs.getInt(1);
 			}
+			st.close();
 			cp.releaseConnection(connection);
 		} catch (SQLException e1) {
 			e1.printStackTrace();
@@ -77,11 +51,58 @@ public class DevelopingDAO {
 			st.setLong(2, taskId);
 			st.setLong(1, hours);
 			st.executeQuery();
+			st.close();
 			cp.releaseConnection(connection);
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static void updateActive(final long empId, final long taskId, final boolean active) {
+		ConnectionPool cp = ConnectionPool.getConnectionPool();
+		try(Connection connection = cp.getConnection();) {
+			String sql = 
+					"UPDATE developing "
+					+ "SET active = ?"
+					+ "WHERE task_id = ? AND employee_id = ?" ;		
+			PreparedStatement st = connection.prepareStatement(sql);
+			st.setLong(3, empId);
+			st.setLong(2, taskId);
+			st.setBoolean(1, active);
+			st.executeQuery();
+			st.close();
+			cp.releaseConnection(connection);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static Map<Long,Long> getEmployeeIdsAndHoursByTaskId(final long taskId){
+		ConnectionPool cp = ConnectionPool.getConnectionPool();
+		try(Connection connection = cp.getConnection();) {
+			String sql = 
+					"SELECT id,hrs "
+					+ "FROM employees INNER JOIN developing ON id=employee_id "
+					+ "WHERE task_id = ?";		
+			PreparedStatement st = connection.prepareStatement(sql);
+			st.setLong(1, taskId);
+			ResultSet rs = st.executeQuery();			
+			Map<Long,Long> result = new LinkedHashMap<>();
+			while(rs.next()) {				
+				result.put(rs.getLong(1),rs.getLong(2));
+			}
+			st.close();
+			cp.releaseConnection(connection);
+			return result;
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

@@ -22,6 +22,10 @@ public class Task {
 		this.name = name;
 	}
 
+	public Task() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public long getId() {
 		return id;
 	}
@@ -58,7 +62,7 @@ public class Task {
 		return workers_num;
 	}
 
-	public void setWorkers_num(int workers_num) {
+	public void setWorkers_num(long workers_num) {
 		this.workers_num = workers_num;
 	}
 	

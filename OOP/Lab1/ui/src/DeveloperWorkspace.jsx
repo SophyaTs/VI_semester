@@ -15,10 +15,6 @@ class DeveloperWorkspace extends Component{
         //this.getTasks = this.getTasks.bind(this);
         this.render = this.render.bind(this);
     }
-    
-    renderOption(index, item){
-        return(<option name="tasks" value={item.id}>{item.name}</option>); 
-    }
 
     componentDidMount(){
         $.post({
@@ -44,11 +40,9 @@ class DeveloperWorkspace extends Component{
         });
 
         $(document).on("change", "#tasks", function(event){
+            var new_task = $('#tasks').find(":selected").val();           
             this.setState({
-                show_input: true
-            });
-            var new_task = $('#tasks').find(":selected").val();
-            this.setState({
+                show_input: true,
                 task_id: new_task
             })
             $.post({
@@ -86,7 +80,7 @@ class DeveloperWorkspace extends Component{
         this.setState({
           hrs: e.target.value
         });
-      }
+    }
     
     render(){
  /*        const items = [];

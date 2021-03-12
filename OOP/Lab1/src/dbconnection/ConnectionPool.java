@@ -44,8 +44,12 @@ public class ConnectionPool {
 		return cp;
 	}
 	
-	public Connection getConnection() throws InterruptedException {
-		return connections.take();
+	public Connection getConnection() throws InterruptedException, SQLException {
+		Connection c = connections.take();
+		if (c.isClosed()) {
+			c = DriverManager.getConnection(url,user,password);
+		}
+		return c;
 	}
 	
 	public void releaseConnection(Connection c) throws InterruptedException {

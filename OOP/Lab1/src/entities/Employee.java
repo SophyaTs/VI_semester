@@ -6,9 +6,9 @@ public class Employee {
 	private String login;
 	private String password;
 	private Role position;
-	private int salary;
+	private long salary;
 	
-	public Employee(long id, String name, String login, String password, Role position, int salary) {
+	public Employee(long id, String name, String login, String password, Role position, long salary) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -60,11 +60,11 @@ public class Employee {
 		this.position = position;
 	}
 
-	public int getSalary() {
+	public long getSalary() {
 		return salary;
 	}
 
-	public void setSalary(int salary) {
+	public void setSalary(long salary) {
 		this.salary = salary;
 	}
 	
