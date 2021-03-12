@@ -15,7 +15,7 @@ class ManagerWorkspace extends Component{
             projectId: 0,
             taskId: 0,
             total: 0,
-            cost: 0,
+            cost: '---',
             required: 0,
         };
         this.render = this.render.bind(this);
@@ -148,7 +148,16 @@ class ManagerWorkspace extends Component{
 
         // save changes
         $(document).on("click", "#savebtn", function(event){
-            //TODO
+            let selected  = $('#devs').find(":checked").val();
+            $.ajax({
+                type: "PUT",
+                url: 'http://localhost:8080/Lab1/dev',
+                contentType: "application/json",
+                data: JSON.stringify({
+                    selectedIDs: selected,
+                    taskId: this.state.taskId,
+                })               
+            });
         }.bind(this));
     }
 
@@ -191,7 +200,7 @@ class ManagerWorkspace extends Component{
                             </tbody>
                         </table>
                         <p>Total: {this.state.total} </p>{this.state.showWarning ? <p>Too many developers!</p>: null}<br/>
-                       {/* TODO  <p>Estimated cost: {this.state.cost}</p><br/> */}
+                       {/* TODO  <p>Current cost: {this.state.cost}</p><br/> */}
                         <button id = "savebtn">Save</button>
                     </div> : null                  
                 }

@@ -81,6 +81,29 @@ public class DevelopingDAO {
 		}
 	}
 	
+	public static void insert(final long empId, final long taskId, final long hrs, final boolean active) {
+		ConnectionPool cp = ConnectionPool.getConnectionPool();
+		try(Connection connection = cp.getConnection();) {
+			String sql = 
+					"INSERT INTO developing (employee_id,task_id,hrs,active) "
+					+ "VALUES (?,?,?,?)";		
+			PreparedStatement st = connection.prepareStatement(sql);
+			st.setLong(1, empId);
+			st.setLong(2, taskId);
+			st.setLong(3, hrs);
+			st.setBoolean(4, active);
+			int count = st.executeUpdate();
+			st.close();
+			if(count == 0)
+				updateActive(empId,taskId,active);			
+			cp.releaseConnection(connection);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static Map<Long,Long> getEmployeeIdsAndHoursByTaskId(final long taskId){
 		ConnectionPool cp = ConnectionPool.getConnectionPool();
 		try(Connection connection = cp.getConnection();) {
@@ -104,5 +127,22 @@ public class DevelopingDAO {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public static void updateActiveDevelopers(final long taskId, final List<Long> empIds) {
+		List<Long> oldIds = EmployeesDAO.getActiveEmployeeIdsByTaskId(taskId);
+		List<Long> added = new ArrayList<>();
+		List<Long> deleted = new ArrayList<>();
+		for(long id : empIds)
+			if(!oldIds.contains(id))
+				added.add(id);
+		for(long id : oldIds)
+			if(!empIds.contains(id))
+				deleted.add(id);
+		
+		for(long id : added)
+			insert(id,taskId,0,true);
+		for(long id : deleted)
+			updateActive(id,taskId,false);
 	}
 }

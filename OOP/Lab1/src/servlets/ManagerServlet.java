@@ -1,8 +1,10 @@
 package servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.lang.reflect.Type;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
 import dao.DevelopingDAO;
 import dao.EmployeesDAO;
@@ -91,4 +94,12 @@ public class ManagerServlet extends HttpServlet {
 		}
 	}
 
+	
+	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		response.addHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+		data = new Gson().fromJson(request.getReader(), JsonObject.class);
+		Type ListType = new TypeToken<ArrayList<Long>>(){}.getType();
+		List<Long> empIds = new Gson().fromJson(data.get("selectedIds"), ListType); 
+		DevelopingDAO.updateActiveDevelopers(data.get("taskId").getAsLong(), empIds);
+	}
 }
