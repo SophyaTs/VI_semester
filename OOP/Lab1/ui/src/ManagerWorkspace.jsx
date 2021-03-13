@@ -64,7 +64,8 @@ class ManagerWorkspace extends Component{
                 showTaskMenu: true,
                 showChooseTask: true,
                 showDevs: false,
-                projectId: newProject
+                projectId: newProject,
+                cost: '---',
             });
             $.post({
                 url: 'http://localhost:8080/Lab1/mng',
@@ -148,15 +149,37 @@ class ManagerWorkspace extends Component{
 
         // save changes
         $(document).on("click", "#savebtn", function(event){
-            let selected  = $('#devs').find(":checked").val();
+            let selected = $('#devs').find(":checked");
+            let ids = [];
+            $.each(selected, function(index,item){
+                ids.push($(item).val());
+            });
             $.ajax({
                 type: "PUT",
-                url: 'http://localhost:8080/Lab1/dev',
+                url: 'http://localhost:8080/Lab1/mng',
                 contentType: "application/json",
                 data: JSON.stringify({
-                    selectedIDs: selected,
+                    calc: false,
+                    selectedIDs: ids,
                     taskId: this.state.taskId,
                 })               
+            });
+        }.bind(this));
+
+        // calculate cost
+        $(document).on("click", "#calcbtn", function(event){
+            $.post({
+                url: 'http://localhost:8080/Lab1/mng',
+                contentType: "application/json",
+                data: JSON.stringify({
+                    calc: true,
+                    projectId: this.state.projectId,
+                }),
+                success: function(response){
+                    this.setState({
+                        cost: String(response)
+                    });
+                }.bind(this)               
             });
         }.bind(this));
     }
@@ -200,7 +223,8 @@ class ManagerWorkspace extends Component{
                             </tbody>
                         </table>
                         <p>Total: {this.state.total} </p>{this.state.showWarning ? <p>Too many developers!</p>: null}<br/>
-                       {/* TODO  <p>Current cost: {this.state.cost}</p><br/> */}
+                        <p>Current cost: {this.state.cost} </p> <button id = "calcbtn">Calculate</button>
+                        <br/>
                         <button id = "savebtn">Save</button>
                     </div> : null                  
                 }

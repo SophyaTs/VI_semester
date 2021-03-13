@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
+import bsnslogic.BusinessLogic;
 import dao.DevelopingDAO;
 import dao.EmployeesDAO;
 import dao.ProjectsDAO;
@@ -56,27 +57,34 @@ public class ManagerServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setCharacterEncoding("UTF-8");
-		response.setContentType("application/json");
 		response.addHeader("Access-Control-Allow-Origin", "http://localhost:3000");
 		data = new Gson().fromJson(request.getReader(), JsonObject.class);
 		
-		// just getting lists of projects or tasks, nothing too crazy
-		if(data.get("doGet").getAsBoolean() == true) {
-			doGet(request,response);
-			return;
-		}
-		
-		if(data.get("forTask").getAsBoolean() == true) {
-			long taskId = data.get("taskId").getAsLong();
-			Task task = TasksDAO.getTask(taskId);
-			Response r = new Response(
-					EmployeesDAO.getEmployeesByQualification(task.getQualification()),
-					EmployeesDAO.getActiveEmployeeIdsByTaskId(taskId),
-					DevelopingDAO.getEmployeeIdsAndHoursByTaskId(taskId),
-					task.getWorkers_num()
-					);
-			String json = new Gson().toJson(r);
-			response.getWriter().write(json);
+		if(data.get("calc") == null) {	
+			response.setContentType("application/json");
+			
+			// just getting lists of projects or tasks, nothing too crazy
+			if(data.get("doGet").getAsBoolean() == true) {
+				doGet(request,response);
+				return;
+			}
+			
+			if(data.get("forTask").getAsBoolean() == true) {
+				long taskId = data.get("taskId").getAsLong();
+				Task task = TasksDAO.getTask(taskId);
+				Response r = new Response(
+						EmployeesDAO.getEmployeesByQualification(task.getQualification()),
+						EmployeesDAO.getActiveEmployeeIdsByTaskId(taskId),
+						DevelopingDAO.getEmployeeIdsAndHoursByTaskId(taskId),
+						task.getWorkers_num()
+						);
+				String json = new Gson().toJson(r);
+				response.getWriter().write(json);
+			}
+		} else {
+			response.setContentType("text/plain");
+			Long cost = BusinessLogic.calculateCost(data.get("projectId").getAsLong());
+			response.getWriter().write(cost.toString());
 		}
 	}
 	
@@ -99,7 +107,7 @@ public class ManagerServlet extends HttpServlet {
 		response.addHeader("Access-Control-Allow-Origin", "http://localhost:3000");
 		data = new Gson().fromJson(request.getReader(), JsonObject.class);
 		Type ListType = new TypeToken<ArrayList<Long>>(){}.getType();
-		List<Long> empIds = new Gson().fromJson(data.get("selectedIds"), ListType); 
+		List<Long> empIds = new Gson().fromJson(data.get("selectedIDs"), ListType); 
 		DevelopingDAO.updateActiveDevelopers(data.get("taskId").getAsLong(), empIds);
 	}
 }
