@@ -1,5 +1,5 @@
 import { Component } from "react";
-import $,{ajax} from "jquery";
+import $,{ajax, post} from "jquery";
 import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
@@ -14,26 +14,30 @@ class Greeting extends Component{
 
         $(document).on("click", "#exitbtn", function(event){
             //remove old credentials
-            cookies.remove("LOGIN");
-            cookies.remove("PASSWORD");
+            cookies.remove("LOGIN",{path:'/Lab1'});
+            cookies.remove("PASSWORD",{path:'/Lab1'});
+            cookies.remove("ROLE",{path:'/Lab1'});
             localStorage.setItem("username",'');
             localStorage.setItem("emloyee_id",0);
             
             $.ajax({
-                type:"PUT",
+                type: "PUT",
                 url: 'http://localhost:8080/Lab1/index',
+                contentType: "application/json",
                 crossDomain: true,
                 xhrFields: { withCredentials: true },
-            })
-            window.location.href='/'; 
+                success: function(){
+                    window.location.href='/'; 
+                }
+            });           
         }.bind(this));
     }
 
     render(){
         return(
-            <div>
+            <div class = 'greetingtext'>
                 Welcome, <label id = "username"></label>!
-                <button id = "exitbtn">Exit</button>
+                <div class='exitbutton' id = "exitbtn"/>
             </div>
         )
     }

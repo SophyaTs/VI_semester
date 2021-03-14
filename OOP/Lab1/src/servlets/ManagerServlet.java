@@ -31,7 +31,7 @@ import entities.Task;
 @WebServlet("/mng")
 public class ManagerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private JsonObject data;
+
 	
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -51,8 +51,9 @@ public class ManagerServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//response.addHeader("Access-Control-Allow-Origin", "http://localhost:3000");	
 		
-		data = new Gson().fromJson(request.getReader(), JsonObject.class);
+		JsonObject data = new Gson().fromJson(request.getReader(), JsonObject.class);
 		String json = null;
 		switch(data.get("action").getAsString()) {
 		case "listprojects":

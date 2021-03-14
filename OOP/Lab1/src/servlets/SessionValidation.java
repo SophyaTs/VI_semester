@@ -29,7 +29,9 @@ public class SessionValidation {
 			sessions.remove(session);
 			session.invalidate();
 			System.out.println("Session invalidated");
-		}		
+		} else {
+			System.out.println("Session was already null");
+		}
 	}
 	
 	public static void createSession(HttpServletRequest request) {

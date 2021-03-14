@@ -32,6 +32,9 @@ class DeveloperWorkspace extends Component{
                     select.append('<option value="'+item.id+'">'+item.name+'</option>');
                 }.bind(this));
             }.bind(this),
+            error: function(){
+                window.location.href = '/';
+            },
         });
 
         $(document).on("change", "#tasks", function(event){
@@ -90,23 +93,35 @@ class DeveloperWorkspace extends Component{
         return(
             <div>
                 <Greeting />
-                <br/>
-                <select name = "tasks" id = "tasks">
-                    { !this.state.show_input ? <option name="tasks" value='0' id="none">Choose task</option> : null}
-                </select><br/><br/>
-                { this.state.show_input ? 
-                    <div>
-                        <input 
-                            type = "number" 
-                            id = "hours" 
-                            value = {this.state.hrs} 
-                            min = '0' 
-                            step = '1'  
-                            onChange={this.onHandleChange}
-                        /><br/><br/>
-                        <button id = "savebtn">Save</button>
-                    </div> 
-                : null}
+                <table class = "grid">
+                    <tr>
+                        <td class = "gridline labelcol">Task:</td>
+                        <td class = "gridline inputcol">
+                        <select name = "tasks" id = "tasks">
+                            { !this.state.show_input ? <option name="tasks" value='0' id="none">Choose task</option> : null}
+                        </select>
+                        </td>
+                    </tr>
+                    { this.state.show_input ? <tr>                       
+                        <td class = "gridline labelcol">Spent hours:</td>
+                        <td class = "gridline inputcol">
+                            <input 
+                                type = "number" 
+                                id = "hours" 
+                                value = {this.state.hrs} 
+                                min = '0' 
+                                step = '1'  
+                                onChange={this.onHandleChange}
+                            />
+                        </td>
+                    </tr> : null}
+                    <tr>
+                        <td colSpan='2'>
+                            <center><button id = "savebtn">Save</button></center>
+                        </td> 
+                    </tr>
+                </table>
+                
             </div>
         )
     }

@@ -29,7 +29,6 @@ import entities.Task;
 @WebServlet("/dev")
 public class DeveloperServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-//	private JsonObject data;
 //
 //	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 //		
@@ -38,7 +37,6 @@ public class DeveloperServlet extends HttpServlet {
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//response.setCharacterEncoding("UTF-8");			
 	    //response.addHeader("Access-Control-Allow-Origin", "http://localhost:3000");	    
-		
 		
 		JsonObject data = new Gson().fromJson(request.getReader(), JsonObject.class);
 		long employee_id = 0;

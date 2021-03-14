@@ -1,3 +1,4 @@
+import './style.css';
 import { Component } from 'react';
 import $, { get, post } from "jquery";
 import Cookies from 'universal-cookie';
@@ -9,7 +10,8 @@ class Form extends Component{
       super(props);
       this.state = {
         login: '',
-        password: ''
+        password: '',
+        showError: false,
       };
       this.onHandleChangeLogin = this.onHandleChangeLogin.bind(this);
       this.onHandleChangePassword = this.onHandleChangePassword.bind(this);
@@ -21,7 +23,7 @@ class Form extends Component{
         //remove old credentials
         cookies.remove("LOGIN");
         cookies.remove("PASSWORD");
-        cookies.remove("ROLE");
+        cookies.remove("ROLE",{path:'/Lab1'});
 
         // create and validate new ones
         cookies.set("LOGIN",this.state.login, {path:'/Lab1'});
@@ -32,7 +34,9 @@ class Form extends Component{
           xhrFields: { withCredentials: true },
           success: function(response){
             if (response == null)
-              $("#errormsg").text("Login or password was incorrect");
+              this.setState({
+                showError: true
+              });
             else {
               localStorage.setItem("username",response.name);
               localStorage.setItem("employee_id", response.id);
@@ -65,27 +69,44 @@ class Form extends Component{
     render() {
       return(
         <div>
-          <div id = "errormsg"></div>
           <form id = "loginform"> 
-            <label>Name:
-              <input 
-                type = "text" 
-                name = "login"
-                onChange = {this.onHandleChangeLogin}
-                value = {this.state.login}
-              /><br />
-            </label>
+          <table class = 'grid'>
+            { this.state.showError ?
+              <tr>
+              <td class = 'errormsg' colSpan='2'>Login or password was incorrect</td>
+            </tr> : null}
+          
+            <tr>
+              <td class = 'gridline labelcol'>Name:</td>
+              <td class = 'gridline inputcol'>
+                <input 
+                  type = "text" 
+                  name = "login"
+                  onChange = {this.onHandleChangeLogin}
+                  value = {this.state.login}
+                />
+              </td>
+            </tr>
   
-            <label>Password:
-            <input 
-              type = "password" 
-              name = "password" 
-              onChange = {this.onHandleChangePassword}
-              value = {this.state.password}
-            /><br />
-            </label>
-            
-            <button type="submit">Submit</button>
+            <tr>
+              <td class = 'gridline labelcol'>Password:</td>
+              <td class = 'gridline inputcol'>
+                <input 
+                  type = "password" 
+                  name = "password" 
+                  onChange = {this.onHandleChangePassword}
+                  value = {this.state.password}
+                />
+              </td>
+            </tr>    
+
+            <tr>
+              <td colSpan='2'>
+                <center><button type="submit">Log in</button></center>
+                </td>
+            </tr>
+                             
+          </table>
           </form>
         </div>
       )

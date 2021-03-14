@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import dbconnection.ConnectionPool;
@@ -63,9 +64,8 @@ public class LoginServlet extends HttpServlet {
 		if(emp != null) {
 			if(emp.getPassword().equals(password)) {
 				SessionValidation.createSession(request);
-				cookie = new Cookie("ROLE",emp.getPosition().getTitle().equals("manager") ? "m" : "d");
+				cookie = new Cookie("ROLE","manager".equals(emp.getPosition().getTitle()) ? "m" : "d");
 				cookie.setHttpOnly(false);
-				cookie.setPath("/Lab1");
 				response.addCookie(cookie);
 				response.getWriter().write(new Gson().toJson(new Response(emp.getId(),emp.getName(), emp.getPosition())));
 			}
@@ -91,9 +91,12 @@ public class LoginServlet extends HttpServlet {
 	    }
 		String role = cookie.getValue();
 		if ("m".equals(role))
-			 new ManagerServlet().doPost(request,response);
+			new ManagerServlet().doPost(request,response);
+			//response.sendRedirect("/mng");
 		else
 			new DeveloperServlet().doPost(request,response);
+			//response.sendRedirect("/dev");
+		
 		//response.setContentType("application/json");	
 	       	    
 		//JsonObject data = new Gson().fromJson(request.getReader(), JsonObject.class);

@@ -60,6 +60,9 @@ class ManagerWorkspace extends Component{
                     select.append('<option name="projects" value="'+item.id+'">'+item.name+'</option>');
                 }.bind(this));
             }.bind(this),
+            error: function(){
+                window.location.href = '/';
+            },
         });
 
         // get tasks for chosen project
@@ -102,7 +105,7 @@ class ManagerWorkspace extends Component{
                 showDevs: true,
                 taskId: newTask,
             });
-            $("tbody").empty();
+            $("#devs").empty();
             $('option[value="0"]').remove();
             if(this.state.taskId != 0)
             $.post({
@@ -121,13 +124,13 @@ class ManagerWorkspace extends Component{
 
                     // render all developers
                     $.each(allDevs, function(index,item){
-                        $("tbody").append(
+                        $("#devs").append(
                             '<tr>'+
-                            '<td><input type="checkbox" id="d'+item.id+'" value="'+item.id+'"></td>'+
-                            '<td>'+item.id+'</td>'+
-                            '<td>'+item.name+'</td>'+
-                            '<td>'+item.salary+'</td>'+
-                            '<td id="dh'+item.id+'">0</td>'+
+                            '<td class="devtable skinny"><input class = "skinny" type="checkbox" id="d'+item.id+'" value="'+item.id+'"></td>'+
+                            '<td class="devtable skinny">'+item.id+'</td>'+
+                            '<td class="devtable large">'+item.name+'</td>'+
+                            '<td class="devtable skinny">'+item.salary+'</td>'+
+                            '<td class="devtable skinny" id="dh'+item.id+'">0</td>'+
                             '</tr>'                            
                         );
                         var idStr = "d" + item.id;
@@ -215,30 +218,54 @@ class ManagerWorkspace extends Component{
         return(
             <div>
                 <Greeting/>
-                <select id = "projects">{this.renderChooseProject()}</select><br/>
-                { this.state.showTaskMenu ? 
-                    <select id = "tasks"></select> : null
-                }
-                { this.state.showDevs ? 
-                    <div>
-                        <p>Developers required: {this.state.required}</p><br/>
-                        <table id = "devs">
-                            <thead>
-                                <td>Choosen</td>
-                                <td>ID</td>
-                                <td>Name</td>
-                                <td>Salary</td> 
-                                <td>Hours spent</td>                               
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                        <p>Total: {this.state.total} </p>{this.state.showWarning ? <p>Too many developers!</p>: null}<br/>
-                        <p>Current cost: {this.state.cost} </p> <button id = "calcbtn">Calculate</button>
-                        <br/>
-                        <button id = "savebtn">Save</button>
-                    </div> : null                  
-                }
+
+                <table class = 'grid'>
+                    <tbody>
+                        <tr>
+                            <td class = 'gridline labelcol'>Project:</td>
+                            <td class = 'gridline inputcol'>
+                                <select id = "projects">{this.renderChooseProject()}</select><br/>
+                            </td>
+                        </tr>
+                        { this.state.showTaskMenu ? <tr>
+                            <td class = 'gridline labelcol'>Task:</td>
+                            <td class = 'gridline inputcol'>
+                                <select id = "tasks"></select>
+                            </td>
+                        </tr> : null}
+
+                        { this.state.showDevs ? <tr>
+                            <td colSpan='2'>
+                                <p>Developers required: {this.state.required}</p><br/>
+                                <center>
+                                    <table class = 'devtable' >
+                                        <thead>
+                                            <th class='devtable'>Choosen</th>
+                                            <th class='devtable'>ID</th>
+                                            <th class='devtable'>Name</th>
+                                            <th class='devtable'>Salary</th> 
+                                            <th class='devtable'>Hours spent</th>                               
+                                        </thead>
+                                    <tbody id = "devs"></tbody>
+                                    </table>
+                                </center><br/>
+                                <p>Total: {this.state.total} </p>{this.state.showWarning ? <p class='errormsg'>Too many developers!</p> : null}<br/>
+                            </td>
+                        </tr> : null}
+
+                        { this.state.showTaskMenu ? <tr>
+                            <td class = 'gridline labelcol'><p>Current cost: {this.state.cost}$ </p> <button id = "calcbtn">Calculate</button></td>
+                            <td class = 'gridline inputcol'></td>
+                        </tr> : null}
+
+                        <tr>
+                            <td colSpan='2'>
+                                <center><button id = "savebtn">Save</button></center>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
             </div>
         )
     }
