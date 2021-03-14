@@ -36,56 +36,78 @@ public class ManagerServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// get list of projects
-		if(data.get("project").getAsBoolean() == true) {
-			List<Project> list = ProjectsDAO.getProjectsAll();
-			String json = new Gson().toJson(list);
-			response.getWriter().write(json);
-		}
-		// get list of tasks
-		else {
-			long prId = data.get("projectId").getAsLong();
-			List<Task> list = TasksDAO.getTasksByProjectId(prId);
-			String json = new Gson().toJson(list);
-			response.getWriter().write(json);
-		}
-	}
+//	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//		// get list of projects
+//		if(data.get("project").getAsBoolean() == true) {
+//			
+//		}
+//		// get list of tasks
+//		else {
+//			
+//		}
+//	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setCharacterEncoding("UTF-8");
-		response.addHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-		data = new Gson().fromJson(request.getReader(), JsonObject.class);
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		if(data.get("calc") == null) {	
+		data = new Gson().fromJson(request.getReader(), JsonObject.class);
+		String json = null;
+		switch(data.get("action").getAsString()) {
+		case "listprojects":
 			response.setContentType("application/json");
-			
-			// just getting lists of projects or tasks, nothing too crazy
-			if(data.get("doGet").getAsBoolean() == true) {
-				doGet(request,response);
-				return;
-			}
-			
-			if(data.get("forTask").getAsBoolean() == true) {
-				long taskId = data.get("taskId").getAsLong();
-				Task task = TasksDAO.getTask(taskId);
-				Response r = new Response(
-						EmployeesDAO.getEmployeesByQualification(task.getQualification()),
-						EmployeesDAO.getActiveEmployeeIdsByTaskId(taskId),
-						DevelopingDAO.getEmployeeIdsAndHoursByTaskId(taskId),
-						task.getWorkers_num()
-						);
-				String json = new Gson().toJson(r);
-				response.getWriter().write(json);
-			}
-		} else {
+			List<Project> projects = ProjectsDAO.getProjectsAll();
+			json = new Gson().toJson(projects);
+			response.getWriter().write(json);
+			break;
+		case "listtasks":
+			response.setContentType("application/json");
+			long prId = data.get("projectId").getAsLong();
+			List<Task> tasks = TasksDAO.getTasksByProjectId(prId);
+			json = new Gson().toJson(tasks);
+			response.getWriter().write(json);
+			break;
+		case "listdevs":
+			response.setContentType("application/json");
+			long taskId = data.get("taskId").getAsLong();
+			Task task = TasksDAO.getTask(taskId);
+			Response r = new Response(
+					EmployeesDAO.getEmployeesByQualification(task.getQualification()),
+					EmployeesDAO.getActiveEmployeeIdsByTaskId(taskId),
+					DevelopingDAO.getEmployeeIdsAndHoursByTaskId(taskId),
+					task.getWorkers_num()
+					);
+			json = new Gson().toJson(r);
+			response.getWriter().write(json);
+			break;
+		case "calc":
 			response.setContentType("text/plain");
 			Long cost = BusinessLogic.calculateCost(data.get("projectId").getAsLong());
 			response.getWriter().write(cost.toString());
+			break;
+		case "save":
+			Type ListType = new TypeToken<ArrayList<Long>>(){}.getType();
+			List<Long> empIds = new Gson().fromJson(data.get("selectedIDs"), ListType); 
+			DevelopingDAO.updateActiveDevelopers(data.get("taskId").getAsLong(), empIds);
+			break;
 		}
+		
+//		if(data.get("calc") == null) {	
+//			response.setContentType("application/json");
+//			
+//			// just getting lists of projects or tasks, nothing too crazy
+//			if(data.get("doGet").getAsBoolean() == true) {
+//				doGet(request,response);
+//				return;
+//			}
+//			
+//			if(data.get("forTask").getAsBoolean() == true) {
+//				
+//			}
+//		} else {
+//			
+//		}
 	}
 	
 	private static class Response{
@@ -102,12 +124,12 @@ public class ManagerServlet extends HttpServlet {
 		}
 	}
 
-	
-	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException{
-		response.addHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-		data = new Gson().fromJson(request.getReader(), JsonObject.class);
-		Type ListType = new TypeToken<ArrayList<Long>>(){}.getType();
-		List<Long> empIds = new Gson().fromJson(data.get("selectedIDs"), ListType); 
-		DevelopingDAO.updateActiveDevelopers(data.get("taskId").getAsLong(), empIds);
-	}
+//	
+//	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException{
+//		response.addHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+//		if (!SessionValidation.validateSession(request, response))
+//			return;
+//		
+//		
+//	}
 }

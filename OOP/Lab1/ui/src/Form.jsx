@@ -1,5 +1,8 @@
 import { Component } from 'react';
-import $, { ajax, post } from "jquery";
+import $, { get, post } from "jquery";
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
 
 class Form extends Component{
     constructor(props){
@@ -13,30 +16,30 @@ class Form extends Component{
       this.componentDidMount = this.componentDidMount.bind(this);
     }
   
-    componentDidMount(){
-      localStorage.setItem("username",'');
+    componentDidMount(){     
       $(document).on("submit", "#loginform", function(event) {
-        
-  
-        $.post({
+        //remove old credentials
+        cookies.remove("LOGIN");
+        cookies.remove("PASSWORD");
+        cookies.remove("ROLE");
+
+        // create and validate new ones
+        cookies.set("LOGIN",this.state.login, {path:'/Lab1'});
+        cookies.set("PASSWORD",this.state.password, {path:'/Lab1'});
+        $.get({
           url:'http://localhost:8080/Lab1/index',
-          contentType:/* 'application/x-www-form-urlencoded; charset=UTF-8' */ "application/json", // NOT dataType!
-          /* headers: {
-            'Access-Control-Allow-Origin': 'http://localhost:3000',
-            'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8' 
-          }, */
-          data: JSON.stringify({
-            login: this.state.login,
-            password: this.state.password
-          }),
-          success: function(resp){
-            //var resp = JSON.parse(responseJSON)
-            if (resp.status === false)
+          crossDomain: true,
+          xhrFields: { withCredentials: true },
+          success: function(response){
+            if (response == null)
               $("#errormsg").text("Login or password was incorrect");
-            else{
-              localStorage.setItem("username",resp.name);
-              localStorage.setItem("employee_id", resp.id);
-              window.location.href = '/m_u=' + this.state.login;                      
+            else {
+              localStorage.setItem("username",response.name);
+              localStorage.setItem("employee_id", response.id);
+              if(response.manager === true)
+                window.location.href = '/m_u=' + this.state.login;  
+              else 
+              window.location.href = '/d_u=' + this.state.login;                     
             }
           }.bind(this),
         });

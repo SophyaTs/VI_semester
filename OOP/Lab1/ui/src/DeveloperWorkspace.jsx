@@ -1,6 +1,6 @@
 import { Component } from "react";
 import Greeting from "./Greeting.jsx";
-import $, { ajax, post } from "jquery";
+import $, { post } from "jquery";
 
 class DeveloperWorkspace extends Component{
     constructor(props){
@@ -18,25 +18,20 @@ class DeveloperWorkspace extends Component{
 
     componentDidMount(){
         $.post({
-            url: 'http://localhost:8080/Lab1/dev',
+            url: 'http://localhost:8080/Lab1/index',
             contentType: "application/json",
             data: JSON.stringify({
-                doGet: true,
+                action: 'getlist',
                 employee_id: localStorage.getItem("employee_id")
             }),
+            crossDomain: true,
+            xhrFields: { withCredentials: true },
             success: function(responseJSON){
                 let select=$('#tasks');
                 $.each(responseJSON, function(index, item) { // Iterate over the JSON array
-                    /* var list = this.state.tasks;
-                    list.push(item);
-                    this.setState({
-                        tasks: list
-                    }); */
-
                     select.append('<option value="'+item.id+'">'+item.name+'</option>');
-                    //$("#tasks").append(<option name="tasks" value={item.id}>{item.name}</option>); 
                 }.bind(this));
-            }.bind(this)
+            }.bind(this),
         });
 
         $(document).on("change", "#tasks", function(event){
@@ -46,32 +41,37 @@ class DeveloperWorkspace extends Component{
                 task_id: new_task
             })
             $.post({
-                url:'http://localhost:8080/Lab1/dev',
+                url:'http://localhost:8080/Lab1/index',
                 contentType: "application/json",
                 data: JSON.stringify({
+                    action: 'get',
                     employee_id: localStorage.getItem("employee_id"),
                     task_id: this.state.task_id
                 }),
+                crossDomain: true,
+                xhrFields: { withCredentials: true },
                 success: function(response){
                     var hours = parseInt(response)
                     this.setState({
                         hrs: hours
                     })
-                }.bind(this)
+                }.bind(this),
             });
             $("#hours").css('visibility', 'visible');
         }.bind(this));
 
         $(document).on("click", "#savebtn", function(event){
-            $.ajax({
-                type: "PUT",
-                url: 'http://localhost:8080/Lab1/dev',
+            $.post({
+                url: 'http://localhost:8080/Lab1/index',
                 contentType: "application/json",
                 data: JSON.stringify({
+                    action: 'save',
                     employee_id: localStorage.getItem("employee_id"),
                     task_id: this.state.task_id,
                     hrs: this.state.hrs 
-                })               
+                }), 
+                crossDomain: true,
+                xhrFields: { withCredentials: true },                  
             });
         }.bind(this));
     }

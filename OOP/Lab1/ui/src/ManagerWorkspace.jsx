@@ -40,20 +40,26 @@ class ManagerWorkspace extends Component{
     }
 
     componentDidMount(){
+        setTimeout(function(){},100);
+
         // fetch all projects
         $.post({
-            url: 'http://localhost:8080/Lab1/mng',
+            url: 'http://localhost:8080/Lab1/index',
             contentType: "application/json",
             data: JSON.stringify({
-                doGet: true,
-                project: true,
+                action: 'listprojects',
             }),
+            crossDomain: true,
+            xhrFields: { withCredentials: true },
+            headers:{
+                'Set-Cookie':  document.cookie.match(/JSESSIONID=[^;]+/)
+            } ,
             success: function(responseJSON){
                 let select=$('#projects');
                 $.each(responseJSON, function(index, item) { // Iterate over the JSON array (projects)
                     select.append('<option name="projects" value="'+item.id+'">'+item.name+'</option>');
                 }.bind(this));
-            }.bind(this)
+            }.bind(this),
         });
 
         // get tasks for chosen project
@@ -68,13 +74,14 @@ class ManagerWorkspace extends Component{
                 cost: '---',
             });
             $.post({
-                url: 'http://localhost:8080/Lab1/mng',
+                url: 'http://localhost:8080/Lab1/index',
                 contentType: "application/json",
                 data: JSON.stringify({
-                    doGet: true,
-                    project: false,
+                    action: 'listtasks',
                     projectId: this.state.projectId
                 }),
+                crossDomain: true,
+                xhrFields: { withCredentials: true },
                 success: function(responseJSON){
                     let select=$('#tasks');
                     select.empty();
@@ -82,7 +89,7 @@ class ManagerWorkspace extends Component{
                     $.each(responseJSON, function(index, item) { // Iterate over the JSON array (tasks)
                         select.append('<option name="tasks" value="'+item.id+'">'+item.name+'</option>');
                     }.bind(this));
-                }.bind(this)
+                }.bind(this),
             });
         }.bind(this));
         
@@ -99,13 +106,14 @@ class ManagerWorkspace extends Component{
             $('option[value="0"]').remove();
             if(this.state.taskId != 0)
             $.post({
-                url: 'http://localhost:8080/Lab1/mng',
+                url: 'http://localhost:8080/Lab1/index',
                 contentType: "application/json",
                 data: JSON.stringify({
-                    doGet: false,
-                    forTask: true,
+                    action: 'listdevs',
                     taskId: this.state.taskId
                 }),
+                crossDomain: true,
+                xhrFields: { withCredentials: true },
                 success: function(responseJSON){
                     let allDevs = responseJSON.allDevs; // array of objects Employees
                     let chDevs = responseJSON.chDevs; // id of chosen Devs
@@ -143,7 +151,7 @@ class ManagerWorkspace extends Component{
                         required: responseJSON.required,
                         total: size
                     });
-                }.bind(this)
+                }.bind(this),
             });
         }.bind(this));
 
@@ -154,32 +162,35 @@ class ManagerWorkspace extends Component{
             $.each(selected, function(index,item){
                 ids.push($(item).val());
             });
-            $.ajax({
-                type: "PUT",
-                url: 'http://localhost:8080/Lab1/mng',
+            $.post({
+                url: 'http://localhost:8080/Lab1/index',
                 contentType: "application/json",
                 data: JSON.stringify({
-                    calc: false,
+                    action: 'save',
                     selectedIDs: ids,
                     taskId: this.state.taskId,
-                })               
+                }),
+                crossDomain: true,
+                xhrFields: { withCredentials: true },               
             });
         }.bind(this));
 
         // calculate cost
         $(document).on("click", "#calcbtn", function(event){
             $.post({
-                url: 'http://localhost:8080/Lab1/mng',
+                url: 'http://localhost:8080/Lab1/index',
                 contentType: "application/json",
                 data: JSON.stringify({
-                    calc: true,
+                    action: 'calc',
                     projectId: this.state.projectId,
                 }),
+                crossDomain: true,
+                xhrFields: { withCredentials: true },
                 success: function(response){
                     this.setState({
                         cost: String(response)
                     });
-                }.bind(this)               
+                }.bind(this),                
             });
         }.bind(this));
     }
