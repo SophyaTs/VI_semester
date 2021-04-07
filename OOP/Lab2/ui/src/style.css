@@ -1,0 +1,119 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.header {
+  position: relative;
+  top: 0;
+  left: 0;
+  margin-bottom: 10px;
+  width: 100%;
+  height: 80px;
+  background-color: #018b49;
+}
+
+.headertextbox{
+  position: relative;
+  top: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 700px;
+}
+
+.headertext{
+  line-height: 60px;
+  font-size: 50px;
+  color: #ececec;
+}
+
+.main {
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  padding: 5px;
+  height:auto;
+  width: 700px;
+  background-color: #e6e6e6;
+}
+
+.devtable{
+  border: 1px solid #252525;
+  border-collapse: collapse;
+}
+
+.skinny{
+  width:50px;
+}
+.large{
+  width: 300px;
+}
+
+.grid{
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  border: 0;
+}
+.gridline{
+  padding-bottom: 10px;
+  height: auto;
+  text-align: left;
+}
+.gridline.labelcol{
+  width: 180px;
+}
+
+.gridline.inputcol{
+  width: auto;
+}
+
+.errormsg{
+  color:#970a0a;
+  background-color: #ecc8c8;
+  text-align: center;
+}
+
+.greetingtext{
+  font-size: 26px;
+  line-height: 30px;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+input {
+  width: 320px;
+  font-size: 16px;
+}
+
+select {
+  width: 337px;
+  font-size: 16px;
+}
+
+button {
+  background-color: #006132;
+  color: #ececec;
+  border: none;
+  padding: 7px 50px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.exitbutton{
+  background-image: url("logout.png");
+  background-repeat:round;
+  position: absolute;
+  top: 5px;
+  right: 0;
+  height: 35px;
+  width: 35px;
+  cursor: pointer;
+}

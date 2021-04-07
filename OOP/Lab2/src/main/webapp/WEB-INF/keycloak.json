@@ -1,0 +1,8 @@
+{
+  "realm": "OOPLab2Keycloak",
+  "bearer-only": true,
+  "auth-server-url": "http://localhost:8180/auth/",
+  "ssl-required": "external",
+  "resource": "spring-backend",
+  "confidential-port": 0
+}
