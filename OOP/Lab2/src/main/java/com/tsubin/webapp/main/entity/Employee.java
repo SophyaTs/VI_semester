@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
 @Entity
 @Table(name = "employees", schema = "public")
 @NoArgsConstructor
@@ -29,9 +30,6 @@ public class Employee {
 	
 	@Column(name = "login", updatable = true)
 	private String login;
-	
-	@Column(name = "password", updatable = true)
-	private String password;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "position", referencedColumnName="id", nullable = false)
@@ -63,14 +61,6 @@ public class Employee {
 
 	public void setLogin(String login) {
 		this.login = login;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
 	}
 
 	public long getSalary() {

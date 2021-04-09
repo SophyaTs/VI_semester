@@ -29,27 +29,28 @@ public class DevelopingService {
 		return dr.findByTaskId(taskId);
 	}
 	
-	public Optional<Developing> findById(long employeeId, long taskId){
-		return dr.findById(new Developing.DevelopingId(employeeId,taskId));
+	public Optional<Developing> findById(Developing.DevelopingId id){
+		return dr.findById(id);
 	}
 	
 	//@Transactional
-	public void updateHrs(long employeeId, long taskId, long hrs) {
-		Developing d = findById(employeeId,taskId).get();
+	public Developing updateHrs(Developing.DevelopingId id, long hrs) {
+		Developing d = findById(id).get();
 		d.setHrs(hrs);
 		dr.save(d);
+		return d;
 	}
 	
-	public void updateActive(long employeeId, long taskId, boolean active) {
-		Optional<Developing> result = findById(employeeId,taskId);
+	public Developing updateActive(Developing.DevelopingId id, boolean active) {
+		Optional<Developing> result = findById(id);
 		Developing d;
 		if (result.isPresent()) {
 			d = result.get();
 			d.setActive(active);			
 		}
 		else {			
-			Employee e = er.getOne(employeeId);
-			Task t = tr.getOne(taskId);
+			Employee e = er.getOne(id.getEmployee_id());
+			Task t = tr.getOne(id.getTask_id());
 			d = new Developing(new Developing.DevelopingId(e.getId(), t.getId()),
 								e,
 								t,
@@ -57,6 +58,7 @@ public class DevelopingService {
 								true);
 		}
 		dr.save(d);
+		return d;
 	}
 	
 	public void updateDevelopers(Long taskId, List<Long> empIds) {
@@ -75,9 +77,9 @@ public class DevelopingService {
 				deleted.add(id);
 		
 		for(long id : added)
-			updateActive(id,taskId,true);
+			updateActive(new Developing.DevelopingId(id,taskId),true);
 		for(long id : deleted)
-			updateActive(id,taskId,false);
+			updateActive(new Developing.DevelopingId(id,taskId),false);
 	}
 	
 	public List<Developing> listAllDevelopers(long projectId){

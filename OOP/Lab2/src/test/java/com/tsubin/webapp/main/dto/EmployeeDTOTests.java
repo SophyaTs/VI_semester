@@ -1,28 +1,36 @@
-package com.tsubin.webapp.main.entity;
+package com.tsubin.webapp.main.dto;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-
-public class RoleTests {
+public class EmployeeDTOTests {
 	@Test
 	public void testGettersSetters() {
-		var dto = new Role();
+		var dto = new EmployeeDTO();
 		
 		dto.setId(1);
 		Assert.assertEquals((long)1,dto.getId());
 		
-		dto.setTitle("Title");
-		Assert.assertEquals("Title",dto.getTitle());
+		dto.setLogin("Name");
+		Assert.assertEquals("Name",dto.getLogin());
+		
+		dto.setName("Name");
+		Assert.assertEquals("Name",dto.getName());
+		
+		dto.setPosition(new RoleDTO());
+		Assert.assertEquals(new RoleDTO(), dto.getPosition());
+		
+		dto.setSalary(1);
+		Assert.assertEquals((long)1,dto.getSalary());
 	}
 	
 	@Test
 	public void testEqual() {
-		var dto1 = new Role();		
+		var dto1 = new EmployeeDTO();		
 		Assert.assertTrue(dto1.canEqual(dto1));
 		Assert.assertTrue(dto1.equals(dto1));
 		
-		var dto2 = new Role();
+		var dto2 = new EmployeeDTO();
 		dto2.setId(5);
 		Assert.assertFalse(dto1.equals(dto2));
 		
@@ -35,9 +43,9 @@ public class RoleTests {
 	
 	@Test
 	public void testHashCode() {
-		var dto1 = new Role();
-		var dto2 = new Role();
-		var dto3 = new Role();
+		var dto1 = new EmployeeDTO();
+		var dto2 = new EmployeeDTO();
+		var dto3 = new EmployeeDTO();
 		dto3.setId(5);
 		
 		Assert.assertTrue(dto1.hashCode()==dto1.hashCode());
@@ -49,7 +57,7 @@ public class RoleTests {
 	
 	@Test
 	public void testToString() {
-		var dto = new Role();
+		var dto = new EmployeeDTO();
 		Assert.assertTrue(dto.toString() instanceof String);
 		Assert.assertTrue(dto.toString() != null);
 	}

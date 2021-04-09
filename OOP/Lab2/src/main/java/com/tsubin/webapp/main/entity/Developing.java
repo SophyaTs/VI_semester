@@ -14,9 +14,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
 @Entity
 @Table(name = "developing", schema = "public")
 //@IdClass(DevelopingId.class)
@@ -51,66 +53,68 @@ public class Developing {
 	@Column(name = "active", updatable = true)
 	private Boolean active;
 	
+	@Data
 	@NoArgsConstructor
+	@AllArgsConstructor
 	@Embeddable
 	public static class DevelopingId implements Serializable{
 		@Column(name="employee_id") //, insertable=false, updatable = false
-		private Long employee_id;
+		private long employee_id;
 		
 		@Column(name="task_id") //, insertable=false, updatable = false
-		private Long task_id;
+		private long task_id;
 		
-		@Override
-		public boolean equals(Object o) {
-			if (this == o) {  
-		          return true;  
-		      }  
-		      if (o instanceof DevelopingId) {
-		    	  var od = (DevelopingId) o;
-		    	  if (od.employee_id == this.employee_id && od.task_id==this.task_id)
-		    		  return true;
-		    	  else
-		    		  return false;
-		      }
-		      else
-		    	  return false;
-		}
-		
-		@Override
-		public int hashCode() {
-			return (int) ((Math.pow(employee_id, 73) + Math.pow(task_id, 59)) % 113);
-		}
-
-		public DevelopingId(long employee_id, long task_id) {
-			super();
-			this.employee_id = employee_id;
-			this.task_id = task_id;
-		}
-
-		
-		public Long getEmployee_id() {
-			return employee_id;
-		}
-
-		public void setEmployee_id(Long employee_id) {
-			this.employee_id = employee_id;
-		}
-
-		public Long getTask_id() {
-			return task_id;
-		}
-
-		public void setTask_id(Long task_id) {
-			this.task_id = task_id;
-		}
-		
-		@Override
-	    public String toString() {
-	        return "DevelopingId{" +
-	                "employee_id=" + employee_id +
-	                ", task_id=" + task_id +
-	                '}';
-	    }
+//		@Override
+//		public boolean equals(Object o) {
+//			if (this == o) {  
+//		          return true;  
+//		      }  
+//		      if (o instanceof DevelopingId) {
+//		    	  var od = (DevelopingId) o;
+//		    	  if (od.employee_id == this.employee_id && od.task_id==this.task_id)
+//		    		  return true;
+//		    	  else
+//		    		  return false;
+//		      }
+//		      else
+//		    	  return false;
+//		}
+//		
+//		@Override
+//		public int hashCode() {
+//			return (int) ((Math.pow(employee_id, 73) + Math.pow(task_id, 59)) % 113);
+//		}
+//
+//		public DevelopingId(long employee_id, long task_id) {
+//			super();
+//			this.employee_id = employee_id;
+//			this.task_id = task_id;
+//		}
+//
+//		
+//		public Long getEmployee_id() {
+//			return employee_id;
+//		}
+//
+//		public void setEmployee_id(Long employee_id) {
+//			this.employee_id = employee_id;
+//		}
+//
+//		public Long getTask_id() {
+//			return task_id;
+//		}
+//
+//		public void setTask_id(Long task_id) {
+//			this.task_id = task_id;
+//		}
+//		
+//		@Override
+//	    public String toString() {
+//	        return "DevelopingId{" +
+//	                "employee_id=" + employee_id +
+//	                ", task_id=" + task_id +
+//	                '}';
+//	    }
 	}
 	
 	public long getHrs() {

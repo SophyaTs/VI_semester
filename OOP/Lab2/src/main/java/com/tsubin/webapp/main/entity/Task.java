@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
 @Entity
 @Table(name = "tasks", schema = "public")
 @NoArgsConstructor

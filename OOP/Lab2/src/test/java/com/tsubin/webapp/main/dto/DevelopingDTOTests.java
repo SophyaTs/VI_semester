@@ -1,32 +1,37 @@
-package com.tsubin.webapp.main.entity;
+package com.tsubin.webapp.main.dto;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-
-public class RoleTests {
+public class DevelopingDTOTests {
 	@Test
 	public void testGettersSetters() {
-		var dto = new Role();
+		var dto = new DevelopingDTO();
 		
-		dto.setId(1);
-		Assert.assertEquals((long)1,dto.getId());
+		dto.setHrs(1);
+		Assert.assertEquals((long)1,dto.getHrs());
 		
-		dto.setTitle("Title");
-		Assert.assertEquals("Title",dto.getTitle());
+		dto.setTask(new TaskDTO());
+		Assert.assertEquals(new TaskDTO(), dto.getTask());
+		
+		dto.setEmployee(new EmployeeDTO());
+		Assert.assertEquals(new EmployeeDTO(), dto.getEmployee());
+		
+		dto.setActive(true);
+		Assert.assertTrue(dto.getActive());
 	}
 	
 	@Test
 	public void testEqual() {
-		var dto1 = new Role();		
+		var dto1 = new DevelopingDTO();		
 		Assert.assertTrue(dto1.canEqual(dto1));
 		Assert.assertTrue(dto1.equals(dto1));
 		
-		var dto2 = new Role();
-		dto2.setId(5);
+		var dto2 = new DevelopingDTO();
+		dto2.setHrs(5);
 		Assert.assertFalse(dto1.equals(dto2));
 		
-		dto1.setId(5);
+		dto1.setHrs(5);
 		Assert.assertTrue(dto1.equals(dto2));
 		
 		var o = new Object();
@@ -35,10 +40,10 @@ public class RoleTests {
 	
 	@Test
 	public void testHashCode() {
-		var dto1 = new Role();
-		var dto2 = new Role();
-		var dto3 = new Role();
-		dto3.setId(5);
+		var dto1 = new DevelopingDTO();
+		var dto2 = new DevelopingDTO();
+		var dto3 = new DevelopingDTO();
+		dto3.setHrs(5);
 		
 		Assert.assertTrue(dto1.hashCode()==dto1.hashCode());
 		Assert.assertTrue(dto1.hashCode()==dto2.hashCode());
@@ -49,7 +54,7 @@ public class RoleTests {
 	
 	@Test
 	public void testToString() {
-		var dto = new Role();
+		var dto = new DevelopingDTO();
 		Assert.assertTrue(dto.toString() instanceof String);
 		Assert.assertTrue(dto.toString() != null);
 	}

@@ -12,14 +12,14 @@ import com.tsubin.webapp.main.repository.EmployeeRepository;
 @Service
 public class EmployeeService {
 	@Autowired
-	private EmployeeRepository tr;
+	private EmployeeRepository er;
 
 	public List<Employee> findByPosition(long role_id){
-		return tr.findByPositionId(role_id);
+		return er.findByPositionId(role_id);
 	}
 	
 	public Employee findByLogin(String login){
-		var list = tr.findByLogin(login);
+		var list = er.findByLogin(login);
 		if (list.size() != 1)
 			return null;
 		return list.get(0);

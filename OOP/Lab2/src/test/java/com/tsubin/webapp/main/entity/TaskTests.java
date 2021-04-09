@@ -3,26 +3,34 @@ package com.tsubin.webapp.main.entity;
 import org.junit.Assert;
 import org.junit.Test;
 
-
-public class RoleTests {
+public class TaskTests {
 	@Test
 	public void testGettersSetters() {
-		var dto = new Role();
+		var dto = new Task();
 		
 		dto.setId(1);
 		Assert.assertEquals((long)1,dto.getId());
 		
-		dto.setTitle("Title");
-		Assert.assertEquals("Title",dto.getTitle());
+		dto.setName("Name");
+		Assert.assertEquals("Name",dto.getName());
+		
+		dto.setProject(new Project());
+		Assert.assertEquals(new Project(),dto.getProject());
+		
+		dto.setQualification(new Role());
+		Assert.assertEquals(new Role(),dto.getQualification());
+		
+		dto.setWorkers_num(1);
+		Assert.assertEquals((long)1,dto.getWorkers_num());
 	}
-	
+
 	@Test
 	public void testEqual() {
-		var dto1 = new Role();		
+		var dto1 = new Task();		
 		Assert.assertTrue(dto1.canEqual(dto1));
 		Assert.assertTrue(dto1.equals(dto1));
 		
-		var dto2 = new Role();
+		var dto2 = new Task();
 		dto2.setId(5);
 		Assert.assertFalse(dto1.equals(dto2));
 		
@@ -35,9 +43,9 @@ public class RoleTests {
 	
 	@Test
 	public void testHashCode() {
-		var dto1 = new Role();
-		var dto2 = new Role();
-		var dto3 = new Role();
+		var dto1 = new Task();
+		var dto2 = new Task();
+		var dto3 = new Task();
 		dto3.setId(5);
 		
 		Assert.assertTrue(dto1.hashCode()==dto1.hashCode());
@@ -49,7 +57,7 @@ public class RoleTests {
 	
 	@Test
 	public void testToString() {
-		var dto = new Role();
+		var dto = new Task();
 		Assert.assertTrue(dto.toString() instanceof String);
 		Assert.assertTrue(dto.toString() != null);
 	}

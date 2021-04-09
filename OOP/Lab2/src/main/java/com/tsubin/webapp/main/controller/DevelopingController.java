@@ -26,7 +26,7 @@ public class DevelopingController {
 	private DevelopingConverter dc;
 	
 	@GetMapping(value = "/projects/{prId}/tasks/{taskId}/working")
-	public List<DevelopingDTO> getDevelopers(@PathVariable Long taskId){
+	public List<DevelopingDTO> getDevelopers(@PathVariable long taskId){
 		return dc.convertListToDTO(ds.findByTask_id(taskId));
 	}
 	
@@ -36,12 +36,12 @@ public class DevelopingController {
 	}
 	
 	@GetMapping(value = "/dev/{empId}/task/{taskId}")
-	public long getHrs(@PathVariable Long empId,@PathVariable Long taskId) {
-		return ds.findById(empId, taskId).get().getHrs();
+	public long getHrs(@PathVariable long empId,@PathVariable long taskId) {
+		return ds.findById(new Developing.DevelopingId(empId, taskId)).get().getHrs();
 	}
 	
 	@PutMapping(value = "/dev/{empId}/task/{taskId}/update")
 	public void updateHrs(@PathVariable Long empId,@PathVariable Long taskId, @RequestBody long hrs) {
-		ds.updateHrs(empId, taskId, hrs);
+		ds.updateHrs(new Developing.DevelopingId(empId,taskId), hrs);
 	}
 }
