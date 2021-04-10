@@ -10,7 +10,6 @@ class DeveloperWorkspace extends Component{
             keycloak: null, 
             authenticated: false,
             task_id: 0,
-            employee_id: 0,
             hrs: 0,
             show_input: false
         };
@@ -21,31 +20,28 @@ class DeveloperWorkspace extends Component{
     }
 
     componentDidMount(){
-                this.setState({
-                    employee_id: localStorage.getItem("employeeId")
-                });
+        localStorage.setItem("taskId",0);
+        $.get({
+            url: 'http://localhost:8080/dev/'+localStorage.getItem("employeeId"),
+                success: function(responseJSON){
+                    let select=$('#tasksD');
+                    $.each(responseJSON, function(index, item) { // Iterate over the JSON array
+                        select.append('<option name="tasksD" value="'+item.id+'">'+item.name+'</option>');                      
+                    }.bind(this));
+                }.bind(this),
+                error: function(){
+                    window.location.href = '/';
+            },
+        });
 
-                $.get({
-                    url: 'http://localhost:8080/dev/'+localStorage.getItem("employeeId"),
-                    success: function(responseJSON){
-                        let select=$('#tasks');
-                        $.each(responseJSON, function(index, item) { // Iterate over the JSON array
-                            select.append('<option value="'+item.id+'">'+item.name+'</option>');
-                        }.bind(this));
-                    }.bind(this),
-                    error: function(){
-                        window.location.href = '/';
-                    },
-                });
-
-        $(document).on("change", "#tasks", function(event){
-            var new_task = $('#tasks').find(":selected").val();           
+        $(document).on("change", "#tasksD", function(event){
+            localStorage.setItem("taskId", $('#tasksD').find(":selected").val()) ;           
             this.setState({
                 show_input: true,
-                task_id: new_task
+                //task_id: new_task
             })
             $.get({
-                url:'http://localhost:8080/dev/'+localStorage.getItem("employeeId")+'/task/'+this.state.task_id,
+                url:'http://localhost:8080/dev/'+localStorage.getItem("employeeId")+'/task/'+localStorage.getItem("taskId"),
                 success: function(response){
                     var hours = parseInt(response)
                     this.setState({
@@ -56,10 +52,10 @@ class DeveloperWorkspace extends Component{
             $("#hours").css('visibility', 'visible');
         }.bind(this));
 
-        $(document).on("click", "#savebtn", function(event){
+        $(document).on("click", "#savebtnD", function(event){
             $.ajax({
                 type:'PUT',
-                url: 'http://localhost:8080/dev/'+localStorage.getItem("employeeId")+'/task/'+this.state.task_id+'/update',
+                url: 'http://localhost:8080/dev/'+localStorage.getItem("employeeId")+'/task/'+localStorage.getItem("taskId")+'/update',
                 contentType: "application/json",
                 data: this.state.hrs, 
                 success: function(){}                 
@@ -76,13 +72,13 @@ class DeveloperWorkspace extends Component{
     render(){ 
                 return(
                     <div>
-                        <Greeting keycloak={this.state.keycloak}/>
+                        <Greeting keycloak={this.props.keycloak}/>
                         <table class = "grid">
                             <tr>
                                 <td class = "gridline labelcol">Task:</td>
                                 <td class = "gridline inputcol">
-                                <select name = "tasks" id = "tasks">
-                                    { !this.state.show_input ? <option name="tasks" value='0' id="none">Choose task</option> : null}
+                                <select name = "tasksD" id = "tasksD">
+                                    { !this.state.show_input ? <option name="tasksD" value='0' id="none">Choose task</option> : null}
                                 </select>
                                 </td>
                             </tr>
@@ -101,7 +97,7 @@ class DeveloperWorkspace extends Component{
                             </tr> : null}
                             <tr>
                                 <td colSpan='2'>
-                                    <center><button id = "savebtn">Save</button></center>
+                                    <center><button id = "savebtnD">Save</button></center>
                                 </td> 
                             </tr>
                         </table>

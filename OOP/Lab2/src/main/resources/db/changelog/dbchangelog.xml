@@ -1,0 +1,112 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+<!--     <changeSet author="sophua (generated)" id="1618062145602-1"> -->
+<!--         <createTable tableName="developing"> -->
+<!--             <column name="employee_id" type="BIGINT"> -->
+<!--                 <constraints nullable="false" primaryKey="true" primaryKeyName="developing_pkey"/> -->
+<!--             </column> -->
+<!--             <column name="task_id" type="BIGINT"> -->
+<!--                 <constraints nullable="false" primaryKey="true" primaryKeyName="developing_pkey"/> -->
+<!--             </column> -->
+<!--             <column defaultValueNumeric="0" name="hrs" type="BIGINT"> -->
+<!--                 <constraints nullable="false"/> -->
+<!--             </column> -->
+<!--             <column defaultValueBoolean="true" name="active" type="BOOLEAN"> -->
+<!--                 <constraints nullable="false"/> -->
+<!--             </column> -->
+<!--         </createTable> -->
+<!--     </changeSet> -->
+<!--     <changeSet author="sophua (generated)" id="1618062145602-2"> -->
+<!--         <createTable tableName="employees"> -->
+<!--             <column autoIncrement="true" name="id" type="BIGINT"> -->
+<!--                 <constraints nullable="false" primaryKey="true" primaryKeyName="employees_pkey"/> -->
+<!--             </column> -->
+<!--             <column name="name" type="VARCHAR"> -->
+<!--                 <constraints nullable="false"/> -->
+<!--             </column> -->
+<!--             <column name="login" type="VARCHAR"> -->
+<!--                 <constraints nullable="false"/> -->
+<!--             </column> -->
+<!--             <column name="password" type="VARCHAR"> -->
+<!--                 <constraints nullable="false"/> -->
+<!--             </column> -->
+<!--             <column defaultValueNumeric="1" name="position" type="BIGINT"> -->
+<!--                 <constraints nullable="false"/> -->
+<!--             </column> -->
+<!--             <column defaultValueNumeric="25" name="salary" remarks="salary per hour" type="BIGINT"> -->
+<!--                 <constraints nullable="false"/> -->
+<!--             </column> -->
+<!--         </createTable> -->
+<!--     </changeSet> -->
+<!--     <changeSet author="sophua (generated)" id="1618062145602-3"> -->
+<!--         <createTable tableName="tasks"> -->
+<!--             <column autoIncrement="true" name="id" type="BIGINT"> -->
+<!--                 <constraints nullable="false" primaryKey="true" primaryKeyName="tasks_pkey"/> -->
+<!--             </column> -->
+<!--             <column name="name" type="VARCHAR"> -->
+<!--                 <constraints nullable="false"/> -->
+<!--             </column> -->
+<!--             <column name="project_id" type="BIGINT"> -->
+<!--                 <constraints nullable="false"/> -->
+<!--             </column> -->
+<!--             <column name="qualification" type="BIGINT"> -->
+<!--                 <constraints nullable="false"/> -->
+<!--             </column> -->
+<!--             <column defaultValueNumeric="1" name="workers_num" type="BIGINT"> -->
+<!--                 <constraints nullable="false"/> -->
+<!--             </column> -->
+<!--         </createTable> -->
+<!--     </changeSet> -->
+<!--     <changeSet author="sophua (generated)" id="1618062145602-4"> -->
+<!--         <createTable tableName="projects"> -->
+<!--             <column autoIncrement="true" name="id" type="BIGINT"> -->
+<!--                 <constraints nullable="false" primaryKey="true" primaryKeyName="projects_pkey"/> -->
+<!--             </column> -->
+<!--             <column name="name" type="VARCHAR"> -->
+<!--                 <constraints nullable="false"/> -->
+<!--             </column> -->
+<!--         </createTable> -->
+<!--     </changeSet> -->
+<!--     <changeSet author="sophua (generated)" id="1618062145602-5"> -->
+<!--         <createTable tableName="role"> -->
+<!--             <column autoIncrement="true" name="id" type="BIGINT"> -->
+<!--                 <constraints nullable="false" primaryKey="true" primaryKeyName="position_pkey"/> -->
+<!--             </column> -->
+<!--             <column name="title" type="VARCHAR"> -->
+<!--                 <constraints nullable="false"/> -->
+<!--             </column> -->
+<!--         </createTable> -->
+<!--     </changeSet> -->
+<!--     <changeSet author="sophua (generated)" id="1618062145602-6"> -->
+<!--         <createIndex indexName="fki_employee_id_fkey" tableName="developing"> -->
+<!--             <column name="employee_id"/> -->
+<!--         </createIndex> -->
+<!--     </changeSet> -->
+<!--     <changeSet author="sophua (generated)" id="1618062145602-7"> -->
+<!--         <createIndex indexName="fki_task_id_fkey" tableName="developing"> -->
+<!--             <column name="task_id"/> -->
+<!--         </createIndex> -->
+<!--     </changeSet> -->
+<!--     <changeSet author="sophua (generated)" id="1618062145602-8"> -->
+<!--         <createIndex indexName="fki_position" tableName="employees"> -->
+<!--             <column defaultValueNumeric="1" name="position"/> -->
+<!--         </createIndex> -->
+<!--     </changeSet> -->
+<!--     <changeSet author="sophua (generated)" id="1618062145602-9"> -->
+<!--         <createIndex indexName="fki_project_id_fkey" tableName="tasks"> -->
+<!--             <column name="project_id"/> -->
+<!--         </createIndex> -->
+<!--     </changeSet> -->
+<!--     <changeSet author="sophua (generated)" id="1618062145602-10"> -->
+<!--         <addForeignKeyConstraint baseColumnNames="employee_id" baseTableName="developing" constraintName="employee_id_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="employees" validate="true"/> -->
+<!--     </changeSet> -->
+<!--     <changeSet author="sophua (generated)" id="1618062145602-11"> -->
+<!--         <addForeignKeyConstraint baseColumnNames="task_id" baseTableName="developing" constraintName="task_id_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="tasks" validate="true"/> -->
+<!--     </changeSet> -->
+<!--     <changeSet author="sophua (generated)" id="1618062145602-12"> -->
+<!--         <addForeignKeyConstraint baseColumnNames="position" baseTableName="employees" constraintName="position" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="role" validate="true"/> -->
+<!--     </changeSet> -->
+<!--     <changeSet author="sophua (generated)" id="1618062145602-13"> -->
+<!--         <addForeignKeyConstraint baseColumnNames="project_id" baseTableName="tasks" constraintName="project_id_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="projects" validate="true"/> -->
+<!--     </changeSet> -->
+</databaseChangeLog>

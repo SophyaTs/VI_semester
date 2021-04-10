@@ -41,33 +41,36 @@ class ManagerWorkspace extends Component{
     }
 
     componentDidMount(){
-                // fetch all projects
-                $.get({
-                    url: 'http://localhost:8080/projects',
-                    success: function(responseJSON){
-                        let select=$('#projects');
-                        $.each(responseJSON, function(index, item) { // Iterate over the JSON array (projects)
-                            select.append('<option name="projects" value="'+item.id+'">'+item.name+'</option>');
-                        }.bind(this));
-                    }.bind(this),
-                    error: function(){
-                        //window.location.href = '/';
-                    },
-                });
+        localStorage.setItem("projectId", 0);
+        localStorage.setItem("taskId",0);
+
+        // fetch all projects
+        $.get({
+            url: 'http://localhost:8080/projects',
+            success: function(responseJSON){
+                let select=$('#projects');
+                $.each(responseJSON, function(index, item) { // Iterate over the JSON array (projects)
+                    select.append('<option name="projects" value="'+item.id+'">'+item.name+'</option>');
+                }.bind(this));
+            }.bind(this),
+            error: function(){
+                //window.location.href = '/';
+            },
+        });
 
         // get tasks for chosen project
         $(document).on("change", "#projects", function(event){
-            var newProject = $('#projects').find(":selected").val();
+            localStorage.setItem("projectId", $('#projects').find(":selected").val());
             this.setState({
                 showChooseProject: false,
                 showTaskMenu: true,
                 showChooseTask: true,
                 showDevs: false,
-                projectId: newProject,
+                //projectId: newProject,
                 cost: '---',
             });
             $.get({
-                url: 'http://localhost:8080/projects/'+this.state.projectId+'/tasks',
+                url: 'http://localhost:8080/projects/'+localStorage.getItem("projectId")+'/tasks',
                 success: function(responseJSON){
                     let select=$('#tasks');
                     select.empty();
@@ -81,18 +84,18 @@ class ManagerWorkspace extends Component{
         
         // get available developers for chosen task
         $(document).on("change", "#tasks", function(event){
-            var newTask = $('#tasks').find(":selected").val();
+            localStorage.setItem("taskId", $('#tasks').find(":selected").val()) ;   
             this.setState({
                 showChooseProject: false,
                 showChooseTask: false,
                 showDevs: true,
-                taskId: newTask,
+                //taskId: newTask,
             });
             $("#devs").empty();
             $('option[value="0"]').remove();
-            if(this.state.taskId != 0){
+            if(localStorage.getItem("taskId") != 0){
                 $.get({
-                    url: 'http://localhost:8080/projects/'+this.state.projectId+'/tasks/'+this.state.taskId+'/all',
+                    url: 'http://localhost:8080/projects/'+localStorage.getItem("projectId")+'/tasks/'+localStorage.getItem("taskId")+'/all',
                     success: function(responseJSON){
                         // render all developers
                         $.each(responseJSON, function(index,item){
@@ -112,7 +115,7 @@ class ManagerWorkspace extends Component{
                 });
 
                 $.get({
-                    url: 'http://localhost:8080/projects/'+this.state.projectId+'/tasks/'+this.state.taskId+'/working',
+                    url: 'http://localhost:8080/projects/'+localStorage.getItem("projectId")+'/tasks/'+localStorage.getItem("taskId")+'/working',
                     success: function(responseJSON){                       
                         var size = 0;
                         $.each(responseJSON, function(index,item){
@@ -135,7 +138,7 @@ class ManagerWorkspace extends Component{
                 });
 
                 $.get({
-                    url: 'http://localhost:8080/projects/'+this.state.projectId+'/tasks/'+this.state.taskId+'/req',
+                    url: 'http://localhost:8080/projects/'+localStorage.getItem("projectId")+'/tasks/'+localStorage.getItem("taskId")+'/req',
                     success: function(response){
                         this.setState({
                             required: response
@@ -153,7 +156,7 @@ class ManagerWorkspace extends Component{
             });
             $.ajax({
                 type: "PUT",
-                url: 'http://localhost:8080/projects/'+this.state.projectId+'/tasks/'+this.state.taskId+'/save',
+                url: 'http://localhost:8080/projects/'+localStorage.getItem("projectId")+'/tasks/'+localStorage.getItem("taskId")+'/save',
                 contentType: "application/json",
                 data: JSON.stringify(ids), 
                 success: function(){}            
@@ -163,7 +166,7 @@ class ManagerWorkspace extends Component{
         // calculate cost
         $(document).on("click", "#calcbtn", function(event){
             $.get({
-                url: 'http://localhost:8080/calc/'+this.state.projectId,
+                url: 'http://localhost:8080/calc/'+localStorage.getItem("projectId"),
                 success: function(response){
                     this.setState({
                         cost: String(response)

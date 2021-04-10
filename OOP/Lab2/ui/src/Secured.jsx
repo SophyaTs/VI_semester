@@ -80,7 +80,7 @@ class Secured extends Component {
                 <div>                   
                     { this.state.exists ? 
                         <div>{this.state.role === 'manager'? <ManagerWorkspace keycloak={this.state.keycloak}/> : <DeveloperWorkspace keycloak={this.state.keycloak}/>} </div>
-                        : <div><Greeting keycloak={this.state.keycloak}/><p>No such employee was found</p></div>
+                        : <div><Greeting keycloak={this.state.keycloak}/><p>Oops! No such employee was found in the database! Try contacting administrator.</p></div>
                     }
                 </div>
             );
@@ -92,7 +92,10 @@ class Secured extends Component {
         }
       }
       
-      //this.clearUser();
+      if(this.state.loaded){
+        this.setState({loaded: false});
+        this.clearUser();
+      }
       return (          
         <div>Initializing Keycloak...</div>
       );
