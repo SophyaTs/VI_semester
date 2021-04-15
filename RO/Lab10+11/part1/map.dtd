@@ -1,0 +1,13 @@
+<!ELEMENT map (country*)>
+<!ELEMENT country (city*)>
+<!ELEMENT city (#PCDATA)>
+<!ATTLIST country
+	id ID #REQUIRED
+	name CDATA #REQUIRED
+>
+<!ATTLIST city
+	id ID #REQUIRED
+	countryId IDREF #REQUIRED
+	name CDATA #REQUIRED
+	population CDATA #REQUIRED
+>

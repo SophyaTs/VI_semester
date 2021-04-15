@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE map SYSTEM "map.dtd">
+<map><country id="x1" name="Ukraine"><city countryId="x1" id="id1" name="Kyiv" population="3500000"/><city countryId="x1" id="id2" name="Kharkiv" population="1500000"/></country><country id="x3" name="France"><city countryId="x3" id="x2" name="Paris" population="10000000"/><city countryId="x3" id="x2" name="Paris" population="10000000"/></country></map>
