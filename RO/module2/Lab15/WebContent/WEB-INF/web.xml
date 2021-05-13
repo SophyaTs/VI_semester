@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+        http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+    id="WebApp_ID" version="3.1">
+    <display-name>RO Lab 15</display-name>
+ 
+ 	<welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+ 	</welcome-file-list>
+ 
+    <servlet>
+        <servlet-name>CountryCRUDServlet</servlet-name>
+        <servlet-class>com.servlets.CountryCRUDServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CityCRUDServlet</servlet-name>
+        <servlet-class>com.servlets.CityCRUDServlet</servlet-class>
+    </servlet>
+ 
+    <servlet-mapping>
+        <servlet-name>CountryCRUDServlet</servlet-name>
+        <url-pattern>/countrylist</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CountryCRUDServlet</servlet-name>
+        <url-pattern>/countrynew</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CountryCRUDServlet</servlet-name>
+        <url-pattern>/countryedit</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CountryCRUDServlet</servlet-name>
+        <url-pattern>/countryinsert</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CountryCRUDServlet</servlet-name>
+        <url-pattern>/countryupdate</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CountryCRUDServlet</servlet-name>
+        <url-pattern>/countrydelete</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>CityCRUDServlet</servlet-name>
+        <url-pattern>/citylist</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CityCRUDServlet</servlet-name>
+        <url-pattern>/citynew</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CityCRUDServlet</servlet-name>
+        <url-pattern>/cityedit</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CityCRUDServlet</servlet-name>
+        <url-pattern>/cityinsert</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CityCRUDServlet</servlet-name>
+        <url-pattern>/cityupdate</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CityCRUDServlet</servlet-name>
+        <url-pattern>/citydelete</url-pattern>
+    </servlet-mapping>
+ 
+<!--     <error-page> -->
+<!--         <exception-type>java.lang.Exception</exception-type> -->
+<!--         <location>/Error.jsp</location> -->
+<!--     </error-page> -->
+</web-app>
