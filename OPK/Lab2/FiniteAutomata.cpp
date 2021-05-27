@@ -530,7 +530,7 @@ std::pair<bool, char> LetterFiniteAutomata::recognize(std::istream& is,
 
             while(is) {
                 char c = is.get();
-                std::cout << c << '\n';
+                //std::cout << c << '\n';
 
                 switch(state){
                     case 1:
