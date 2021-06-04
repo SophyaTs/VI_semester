@@ -6,7 +6,7 @@ public class BinaryPower {
 
     public static BigInteger power(BigInteger a, int power) {
         if (power == -1) {
-            throw new UnsupportedOperationException("Negative power unsupported");
+            throw new UnsupportedOperationException("Error: negative power");
         }
 
         if (power == 0) {

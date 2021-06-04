@@ -12,47 +12,47 @@ public class MillerRabinPrimalityTestTest {
 
     @Test(expected = ArithmeticException.class)
     public void isZeroPrimeShouldThrowArithmeticException() {
-        MillerRabinPrimalityTest.isProbablyPrime(BigInteger.ZERO, certainty);
+        MillerRabin.testPrime(BigInteger.ZERO, certainty);
     }
 
     @Test(expected = ArithmeticException.class)
     public void isNegativePrimeShouldThrowArithmeticException() {
-        MillerRabinPrimalityTest.isProbablyPrime(BigInteger.valueOf(-1000), certainty);
+        MillerRabin.testPrime(BigInteger.valueOf(-1000), certainty);
     }
 
     @Test
     public void isOnePrimeShouldReturnFalse() {
-    	Assert.assertFalse(MillerRabinPrimalityTest.isProbablyPrime(BigInteger.ONE, certainty));
+    	Assert.assertFalse(MillerRabin.testPrime(BigInteger.ONE, certainty));
     }
 
     @Test
     public void isTwoPrimeShouldReturnTrue() {
-    	Assert.assertTrue(MillerRabinPrimalityTest.isProbablyPrime(BigInteger.TWO, certainty));
+    	Assert.assertTrue(MillerRabin.testPrime(BigInteger.TWO, certainty));
     }
 
     @Test
     public void negativeCertaintyAlwaysReturnFalse() {
-    	Assert.assertFalse(MillerRabinPrimalityTest.isProbablyPrime(BigInteger.valueOf(13), -1));
-    	Assert.assertFalse(MillerRabinPrimalityTest.isProbablyPrime(BigInteger.valueOf(1000), -1));
+    	Assert.assertFalse(MillerRabin.testPrime(BigInteger.valueOf(13), -1));
+    	Assert.assertFalse(MillerRabin.testPrime(BigInteger.valueOf(1000), -1));
     }
 
     @Test
     public void zeroCertaintyAlwaysReturnFalse() {
-    	Assert.assertFalse(MillerRabinPrimalityTest.isProbablyPrime(BigInteger.valueOf(13), 0));
-    	Assert.assertFalse(MillerRabinPrimalityTest.isProbablyPrime(BigInteger.valueOf(1000), 0));
+    	Assert.assertFalse(MillerRabin.testPrime(BigInteger.valueOf(13), 0));
+    	Assert.assertFalse(MillerRabin.testPrime(BigInteger.valueOf(1000), 0));
     }
 
     @Test
     public void isProbablyPrimeShouldReturnTrue() {
         for (BigInteger prime : PrimesConstant.primes) {
-        	Assert.assertTrue(MillerRabinPrimalityTest.isProbablyPrime(prime, certainty));
+        	Assert.assertTrue(MillerRabin.testPrime(prime, certainty));
         }
     }
 
     @Test
     public void isProbablyPrimeShouldReturnFalse() {
         for (BigInteger notPrime : PrimesConstant.notPrimes) {
-        	Assert.assertFalse(MillerRabinPrimalityTest.isProbablyPrime(notPrime, certainty));
+        	Assert.assertFalse(MillerRabin.testPrime(notPrime, certainty));
         }
     }
 
@@ -60,7 +60,7 @@ public class MillerRabinPrimalityTestTest {
     public void isProbablyPrimeShouldReturnFalseForNotPrimesBiggerThanInt() {
         int numberOfIsPrimeFalseReturns = 0;
         for (BigInteger bigInteger : PrimesConstant.bigNotPrimes) {
-            if (!MillerRabinPrimalityTest.isProbablyPrime(bigInteger, certainty)) {
+            if (!MillerRabin.testPrime(bigInteger, certainty)) {
                 ++numberOfIsPrimeFalseReturns;
             }
         }
@@ -72,7 +72,7 @@ public class MillerRabinPrimalityTestTest {
     public void isProbablyPrimeShouldReturnTrueForPrimesBiggerThanInt() {
         int numberOfIsPrimeTrueReturns = 0;
         for (BigInteger bigInteger : PrimesConstant.bigPrimes) {
-            if (MillerRabinPrimalityTest.isProbablyPrime(bigInteger, certainty)) {
+            if (MillerRabin.testPrime(bigInteger, certainty)) {
                 ++numberOfIsPrimeTrueReturns;
             }
         }

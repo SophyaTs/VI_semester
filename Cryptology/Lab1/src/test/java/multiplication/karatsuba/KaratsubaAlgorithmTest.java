@@ -9,26 +9,10 @@ import org.junit.Assert;
 
 public class KaratsubaAlgorithmTest {
 
-    @Test
-    public void multiplicationOnZeroShouldReturnZero() {
-    	Assert.assertEquals(BigInteger.ZERO,
-                KaratsubaAlgorithm.multiply(new BigInteger("2034954578765486095"), BigInteger.ZERO));
-    }
+    
 
     @Test
-    public void negativeNumberShouldReturnNegativeWithMultiplyingOnPositive() {
-    	Assert.assertEquals(new BigInteger("-500000000000000"),
-                KaratsubaAlgorithm.multiply(new BigInteger("-5"), new BigInteger("100000000000000")));
-    }
-
-    @Test
-    public void negativeNumberShouldReturnPositiveWithMultiplyingOnNegative() {
-    	Assert.assertEquals(new BigInteger("500000000000000"),
-                KaratsubaAlgorithm.multiply(new BigInteger("-5"), new BigInteger("-100000000000000")));
-    }
-
-    @Test
-    public void resultsForMultiplicationShouldBeSameAsLibMultiplication() {
+    public void checkCorectness() {
         BigInteger a, b;
         Random rand = new Random();
 
@@ -36,7 +20,25 @@ public class KaratsubaAlgorithmTest {
             a = BigInteger.valueOf(Math.abs(rand.nextLong()));
             b = BigInteger.valueOf(Math.abs(rand.nextLong()));
 
-            Assert.assertEquals(a.multiply(b), KaratsubaAlgorithm.multiply(a, b));
+            Assert.assertEquals(a.multiply(b), KaratsubaAlgorithm.actionMultiply(a, b));
         }
+    }
+    
+    @Test
+    public void multiplicationOnZero() {
+    	Assert.assertEquals(BigInteger.ZERO,
+                KaratsubaAlgorithm.actionMultiply(new BigInteger("2034954578765486095"), BigInteger.ZERO));
+    }
+
+    @Test
+    public void checkSigns() {
+    	Assert.assertEquals(new BigInteger("500000000000000"),
+                KaratsubaAlgorithm.actionMultiply(new BigInteger("-5"), new BigInteger("-100000000000000")));
+    }
+    
+    @Test
+    public void checkSignsAgain() {
+    	Assert.assertEquals(new BigInteger("-500000000000000"),
+                KaratsubaAlgorithm.actionMultiply(new BigInteger("-5"), new BigInteger("100000000000000")));
     }
 }

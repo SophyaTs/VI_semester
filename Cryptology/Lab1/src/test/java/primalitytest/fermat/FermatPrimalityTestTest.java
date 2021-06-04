@@ -11,47 +11,47 @@ public class FermatPrimalityTestTest {
 
     @Test(expected = ArithmeticException.class)
     public void isZeroPrimeShouldThrowArithmeticException() {
-        FermatPrimalityTest.isProbablyPrime(BigInteger.ZERO, certainty);
+        Fermat.testPrime(BigInteger.ZERO, certainty);
     }
 
     @Test(expected = ArithmeticException.class)
     public void isNegativePrimeShouldThrowArithmeticException() {
-        FermatPrimalityTest.isProbablyPrime(BigInteger.valueOf(-1000), certainty);
+        Fermat.testPrime(BigInteger.valueOf(-1000), certainty);
     }
 
     @Test
     public void isOnePrimeShouldReturnFalse() {
-    	Assert.assertFalse(FermatPrimalityTest.isProbablyPrime(BigInteger.ONE, certainty));
+    	Assert.assertFalse(Fermat.testPrime(BigInteger.ONE, certainty));
     }
 
     @Test
     public void isTwoPrimeShouldReturnTrue() {
-    	Assert.assertTrue(FermatPrimalityTest.isProbablyPrime(BigInteger.TWO, certainty));
+    	Assert.assertTrue(Fermat.testPrime(BigInteger.TWO, certainty));
     }
 
     @Test
     public void negativeCertaintyAlwaysReturnFalse() {
-    	Assert.assertFalse(FermatPrimalityTest.isProbablyPrime(BigInteger.valueOf(13), -1));
-    	Assert.assertFalse(FermatPrimalityTest.isProbablyPrime(BigInteger.valueOf(1000), -1));
+    	Assert.assertFalse(Fermat.testPrime(BigInteger.valueOf(13), -1));
+    	Assert.assertFalse(Fermat.testPrime(BigInteger.valueOf(1000), -1));
     }
 
     @Test
     public void zeroCertaintyAlwaysReturnFalse() {
-    	Assert.assertFalse(FermatPrimalityTest.isProbablyPrime(BigInteger.valueOf(13), 0));
-    	Assert.assertFalse(FermatPrimalityTest.isProbablyPrime(BigInteger.valueOf(1000), 0));
+    	Assert.assertFalse(Fermat.testPrime(BigInteger.valueOf(13), 0));
+    	Assert.assertFalse(Fermat.testPrime(BigInteger.valueOf(1000), 0));
     }
 
     @Test
     public void isProbablyPrimeShouldReturnTrueForSmallPrimes() {
         for (BigInteger prime : PrimesConstant.primes) {
-        	Assert.assertTrue(FermatPrimalityTest.isProbablyPrime(prime, certainty));
+        	Assert.assertTrue(Fermat.testPrime(prime, certainty));
         }
     }
 
     @Test
     public void isProbablyPrimeShouldReturnFalseForSmallNotPrimes() {
         for (BigInteger notPrime : PrimesConstant.notPrimes) {
-        	Assert.assertFalse(FermatPrimalityTest.isProbablyPrime(notPrime, certainty));
+        	Assert.assertFalse(Fermat.testPrime(notPrime, certainty));
         }
     }
 
@@ -59,7 +59,7 @@ public class FermatPrimalityTestTest {
     public void isProbablyPrimeShouldReturnFalseForNotPrimesBiggerThanInt() {
         int numberOfIsPrimeFalseReturns = 0;
         for (BigInteger bigInteger : PrimesConstant.bigNotPrimes) {
-            if (!FermatPrimalityTest.isProbablyPrime(bigInteger, certainty)) {
+            if (!Fermat.testPrime(bigInteger, certainty)) {
                 ++numberOfIsPrimeFalseReturns;
             }
         }
@@ -71,7 +71,7 @@ public class FermatPrimalityTestTest {
     public void isProbablyPrimeShouldReturnTrueForPrimesBiggerThanInt() {
         int numberOfIsPrimeTrueReturns = 0;
         for (BigInteger bigInteger : PrimesConstant.bigPrimes) {
-            if (FermatPrimalityTest.isProbablyPrime(bigInteger, certainty)) {
+            if (Fermat.testPrime(bigInteger, certainty)) {
                 ++numberOfIsPrimeTrueReturns;
             }
         }

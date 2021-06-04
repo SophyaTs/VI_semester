@@ -10,22 +10,22 @@ import org.junit.Test;
 public class BinaryPowerTest {
 
     @Test
-    public void zeroInPowerZeroShouldReturnOne() {
+    public void zeroInPower() {
     	Assert.assertEquals(BigInteger.ONE, BinaryPower.power(BigInteger.ZERO, 0));
     }
 
     @Test
-    public void negativeNumberShouldReturnNegativeForOddPower() {
+    public void negativeNumbers() {
     	Assert.assertEquals(BigInteger.valueOf(-8), BinaryPower.power(BigInteger.valueOf(-2), 3));
     }
 
     @Test
-    public void negativeNumberShouldReturnPositiveForEvenPower() {
+    public void negativeNumbersAgain() {
     	Assert.assertEquals(BigInteger.valueOf(16), BinaryPower.power(BigInteger.valueOf(-2), 4));
     }
 
     @Test
-    public void resultsForPowerShouldBeSameAsLibPower() {
+    public void checkCorrectnes() {
         BigInteger a;
         int power;
         Random rand = new Random();
