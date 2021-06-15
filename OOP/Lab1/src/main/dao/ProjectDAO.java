@@ -10,7 +10,7 @@ import java.util.List;
 import main.dbconnection.ConnectionPool;
 import main.entities.Project;
 
-public class ProjectsDAO {
+public class ProjectDAO {
 	public static List<Project> getProjectsAll(){
 		ConnectionPool cp = ConnectionPool.getConnectionPool();
 		try(Connection connection = cp.getConnection();) {

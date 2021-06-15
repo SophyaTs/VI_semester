@@ -19,7 +19,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import main.dao.DevelopingDAO;
-import main.dao.TasksDAO;
+import main.dao.TaskDAO;
 import main.dbconnection.ConnectionPool;
 import main.entities.Task;
 
@@ -46,7 +46,7 @@ public class DeveloperServlet extends HttpServlet {
 		case "getlist":
 			response.setContentType("application/json");	    
 			employee_id = data.get("employee_id").getAsInt();
-			List<Task> list = TasksDAO.getTasksByEmpId(employee_id);
+			List<Task> list = TaskDAO.getTasksByEmpId(employee_id);
 			String json = new Gson().toJson(list);
 			response.getWriter().write(json);
 			break;

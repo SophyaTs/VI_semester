@@ -157,7 +157,7 @@ public class DevelopingDAO {
 	}
 	
 	public static void updateActiveDevelopers(final long taskId, final List<Long> empIds) {
-		List<Long> oldIds = EmployeesDAO.getActiveEmployeeIdsByTaskId(taskId);
+		List<Long> oldIds = EmployeeDAO.getActiveEmployeeIdsByTaskId(taskId);
 		List<Long> added = new ArrayList<>();
 		List<Long> deleted = new ArrayList<>();
 		for(long id : empIds)

@@ -11,7 +11,7 @@ import main.dbconnection.ConnectionPool;
 import main.entities.Role;
 import main.entities.Task;
 
-public class TasksDAO {
+public class TaskDAO {
 	public static List<Task> getTasksByEmpId(final long empId){
 		ConnectionPool cp = ConnectionPool.getConnectionPool();
 		try(Connection connection = cp.getConnection();) {

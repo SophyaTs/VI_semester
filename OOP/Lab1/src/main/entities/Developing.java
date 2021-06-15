@@ -7,11 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Task {
-	private long id;
-	private String name;
-	private long project_id;
-	private Role qualification;
-	private long workers_num;
-		
+public class Developing {
+	private long employee_id;
+	private long task_id;
+	private long hrs;
+	private boolean active;	
 }

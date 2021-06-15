@@ -21,7 +21,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import main.dao.EmployeesDAO;
+import main.dao.EmployeeDAO;
 import main.dbconnection.ConnectionPool;
 import main.entities.Employee;
 import main.entities.Role;
@@ -60,7 +60,7 @@ public class LoginServlet extends HttpServlet {
 	    }
 	    String password = cookie.getValue();
 	    
-	    Employee emp = EmployeesDAO.getEmployeeByLogin(login);
+	    Employee emp = EmployeeDAO.getEmployeeByLogin(login);
 		if(emp != null) {
 			if(emp.getPassword().equals(password)) {
 				SessionValidation.createSession(request);

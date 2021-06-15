@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import main.dao.DevelopingDAO;
-import main.dao.TasksDAO;
+import main.dao.TaskDAO;
 import main.entities.Task;
 
 public class BusinessLogic {

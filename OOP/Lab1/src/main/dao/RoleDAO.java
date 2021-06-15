@@ -10,7 +10,7 @@ import java.util.List;
 import main.dbconnection.ConnectionPool;
 import main.entities.Role;
 
-public class RolesDAO {
+public class RoleDAO {
 	public static List<Role> getRolesAll(){
 		ConnectionPool cp = ConnectionPool.getConnectionPool();
 		try(Connection connection = cp.getConnection();) {

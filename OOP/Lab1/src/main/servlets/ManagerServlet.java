@@ -18,9 +18,9 @@ import com.google.gson.reflect.TypeToken;
 
 import main.businesslogic.BusinessLogic;
 import main.dao.DevelopingDAO;
-import main.dao.EmployeesDAO;
-import main.dao.ProjectsDAO;
-import main.dao.TasksDAO;
+import main.dao.EmployeeDAO;
+import main.dao.ProjectDAO;
+import main.dao.TaskDAO;
 import main.entities.Employee;
 import main.entities.Project;
 import main.entities.Task;
@@ -58,24 +58,24 @@ public class ManagerServlet extends HttpServlet {
 		switch(data.get("action").getAsString()) {
 		case "listprojects":
 			response.setContentType("application/json");
-			List<Project> projects = ProjectsDAO.getProjectsAll();
+			List<Project> projects = ProjectDAO.getProjectsAll();
 			json = new Gson().toJson(projects);
 			response.getWriter().write(json);
 			break;
 		case "listtasks":
 			response.setContentType("application/json");
 			long prId = data.get("projectId").getAsLong();
-			List<Task> tasks = TasksDAO.getTasksByProjectId(prId);
+			List<Task> tasks = TaskDAO.getTasksByProjectId(prId);
 			json = new Gson().toJson(tasks);
 			response.getWriter().write(json);
 			break;
 		case "listdevs":
 			response.setContentType("application/json");
 			long taskId = data.get("taskId").getAsLong();
-			Task task = TasksDAO.getTask(taskId);
+			Task task = TaskDAO.getTask(taskId);
 			Response r = new Response(
-					EmployeesDAO.getEmployeesByQualification(task.getQualification()),
-					EmployeesDAO.getActiveEmployeeIdsByTaskId(taskId),
+					EmployeeDAO.getEmployeesByQualification(task.getQualification()),
+					EmployeeDAO.getActiveEmployeeIdsByTaskId(taskId),
 					DevelopingDAO.getEmployeeIdsAndHoursByTaskId(taskId),
 					task.getWorkers_num()
 					);

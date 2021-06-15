@@ -13,7 +13,7 @@ import main.entities.Employee;
 import main.entities.Role;
 import main.entities.Task;
 
-public class EmployeesDAO {
+public class EmployeeDAO {
 	public static Employee getEmployeeByLogin(final String login) {
 		ConnectionPool cp = ConnectionPool.getConnectionPool();		
 		try(Connection connection = cp.getConnection();) {
