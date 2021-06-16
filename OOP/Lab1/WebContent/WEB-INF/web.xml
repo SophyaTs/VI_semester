@@ -7,7 +7,7 @@
   
   <filter>
   <filter-name>CorsFilter</filter-name>
-  <filter-class>servlets.MyCORSFilter</filter-class>
+  <filter-class>main.servlets.MyCORSFilter</filter-class>
 <!--   <init-param> -->
 <!--     <param-name>cors.allowed.origins</param-name> -->
 <!--     <param-value>http://localhost:3000</param-value> -->

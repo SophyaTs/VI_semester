@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<handler-chains xmlns="http://java.sun.com/xml/ns/javaee"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+                xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+  http://java.sun.com/xml/ns/javaee/javaee_web_services_metadata_handler_2_0.xsd">
+    <handler-chain>
+        <handler>
+        	<handler-name>com.knu.Handler</handler-name>
+            <handler-class>com.knu.Handler</handler-class>
+        </handler>
+    </handler-chain>
+</handler-chains>

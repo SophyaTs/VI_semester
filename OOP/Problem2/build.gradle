@@ -1,0 +1,30 @@
+apply plugin: 'java'
+apply plugin: 'war'
+
+repositories {
+    mavenCentral()
+    jcenter()
+    mavenLocal()
+}
+
+dependencies {
+    compile group: 'com.sun.xml.ws', name: 'rt', version: '2.3.2'
+    implementation group: 'javax.xml.ws', name: 'jaxws-api', version: '2.3.1'
+    implementation group: 'javax.xml.soap', name: 'javax.xml.soap-api', version: '1.4.0'
+    implementation group: 'javax.jws', name: 'javax.jws-api', version: '1.1'
+
+    implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.19'
+    implementation 'org.postgresql:postgresql'
+    implementation group: 'com.sun.xml.ws', name: 'jaxws-rt', version: '3.0.0'
+    // https://mvnrepository.com/artifact/com.sun.xml.messaging.saaj/saaj-impl
+	implementation group: 'com.sun.xml.messaging.saaj', name: 'saaj-impl', version: '2.0.0'
+    // implementation group: 'xml-apis', name: 'xml-apis', version: '2.0.2'
+}
+
+apply plugin:'application'
+
+mainClassName = "com.knu.Application"
+
+run {
+    standardInput = System.in
+}
